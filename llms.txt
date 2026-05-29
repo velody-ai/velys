@@ -1,0 +1,53 @@
+# Velys UI (velys)
+
+> A vanilla-extract-based React design system inspired by Vercel Geist. Zero-runtime CSS, light/dark tokens, ESM/CJS + `.d.ts`. Every component is bound to semantic design tokens.
+
+> Prefer the single-file inlined reference when you want everything at once: [llms-full.txt](llms-full.txt).
+
+Usage rules for LLMs/coding agents:
+- Install: `npm i @velody/velys react react-dom`
+- Import the stylesheet **exactly once**: `import "@velody/velys/styles.css";`
+- Apply a theme class at the app root so CSS variables are provided: `lightThemeClass` or `darkThemeClass` (both exported from `@velody/velys`).
+- When using colors/spacing directly, use `vars` (e.g. `vars.color.text.primary`, `vars.space.md`) and avoid hardcoding hex/px.
+- All components support `forwardRef` + native DOM attribute passthrough (unless noted otherwise). `className` is merged onto the root.
+- Variant values are string literal unions. The Props table in each doc below is the source of truth.
+
+## Setup
+
+```tsx
+import "@velody/velys/styles.css";
+import { lightThemeClass, Button } from "@velody/velys";
+
+export default function App() {
+  return (
+    <div className={lightThemeClass}>
+      <Button tone="primary">Get started</Button>
+    </div>
+  );
+}
+```
+
+## Components
+
+- [Button](docs/components/Button.md): solid/outline/ghost × primary/danger × sm/md/lg button
+- [IconButton](docs/components/IconButton.md): square icon button (aria-label required)
+- [Badge](docs/components/Badge.md): status/category label (6 color × solid/subtle)
+- [Input](docs/components/Input.md): text input (sm/md/lg, invalid, icon slot)
+- [Textarea](docs/components/Textarea.md): multi-line input
+- [Select](docs/components/Select.md): hybrid select — custom accessible listbox on desktop, native <select> on touch (sm/md/lg, invalid, placeholder)
+- [Checkbox](docs/components/Checkbox.md): checkbox (checked/indeterminate, label/description)
+- [Radio](docs/components/Radio.md): radio + RadioGroup
+- [Switch](docs/components/Switch.md): toggle switch
+- [Card](docs/components/Card.md): container (elevated/outlined/filled) + CardTitle/CardDescription
+- [Avatar](docs/components/Avatar.md): user avatar (image/initials/icon)
+- [Alert](docs/components/Alert.md): inline banner (5 status × subtle/solid/outline)
+- [Toast](docs/components/Toast.md): notification toast
+- [EmptyState](docs/components/EmptyState.md): empty-state placeholder
+- [Tabs](docs/components/Tabs.md): tabs (compound: Tabs/TabList/Tab/TabPanel)
+- [Tooltip](docs/components/Tooltip.md): hover tooltip (4 directions)
+- [DropdownMenu](docs/components/DropdownMenu.md): dropdown menu (Menu/MenuItem/MenuSeparator/MenuLabel)
+- [Modal](docs/components/Modal.md): modal dialog (portal, controlled)
+
+## Tokens
+
+- [Design tokens](docs/tokens.md): the full set of color (light/dark), space, radius, font, and shadow tokens exposed via `vars`

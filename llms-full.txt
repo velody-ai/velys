@@ -1,0 +1,187 @@
+# llms-full.txt — Using velys (full inlined reference)
+
+The complete, self-contained reference for an LLM helping a developer **consume** the installed `@velody/velys` package — all components inlined in one file. (For the link-based index, see `llms.txt`; for working inside this repo, see `AGENTS.md`.) Everything here is verified against the published API.
+
+Velys UI is a React component library built with vanilla-extract: zero-runtime CSS, light/dark design tokens, ESM + CJS + `.d.ts`. Every component is `forwardRef` and passes native DOM attributes through to its root unless noted; `className` is merged onto the root.
+
+## Install
+
+```bash
+npm i @velody/velys react react-dom   # react / react-dom are peer deps (>=18)
+```
+
+## Required setup (do this once)
+
+1. **Import the stylesheet exactly once** at your app entry — without it, components are unstyled:
+   ```tsx
+   import "@velody/velys/styles.css";
+   ```
+2. **Apply a theme class** to a container so the CSS variables resolve. Components read only from tokens; the theme class supplies the values.
+   ```tsx
+   import "@velody/velys/styles.css";
+   import { lightThemeClass, darkThemeClass, Button } from "@velody/velys";
+
+   export default function App() {
+     return (
+       <div className={lightThemeClass}>
+         <Button>Get started</Button>
+       </div>
+     );
+   }
+   ```
+3. **Dark mode**: swap `lightThemeClass` ↔ `darkThemeClass`. Because portal components (`Modal`, `Toast`, `Tooltip`, `DropdownMenu`) may render to `document.body`, apply the theme class on `<html>` or `<body>` (not only a nested app div) so portalled content is themed too.
+
+## Design tokens (`vars`)
+
+Use `vars` instead of hardcoding hex/px when you need raw values (custom layout, one-off styles):
+
+```tsx
+import { vars } from "@velody/velys";
+const style = { color: vars.color.text.primary, padding: vars.space.md };
+```
+
+- `vars.color.{bg,text,icon,border,brand,success,warning,danger,info}.*`
+  - bg scale: `canvas` (page floor) → `default` (surface) → `subtle` → `muted`, plus `hover`, `active`, `inverse`, `overlay`, `disabled`
+  - status groups expose `{solid, subtle, text, border}` (`brand`/`danger` also `solidHover`)
+- `vars.space.*` — keys with digits use bracket access: `vars.space["2xl"]`
+- `vars.radius.*`, `vars.font.{family,size,lineHeight,weight}.*`, `vars.shadow.*`
+
+## Conventions that apply to every component
+
+- `size` props are string-literal unions (see each component).
+- Form controls are uncontrolled by default; pass `value`/`checked` + `onChange` to control them (standard React).
+- Focus ring is built in (keyboard focus only).
+
+---
+
+## Components
+
+Import any of these from `@velody/velys`.
+
+### Button
+`color`: `"primary"` (default) `| "secondary" | "destructive"` · `variant`: `"solid"` (default) `| "outline" | "ghost"` · `size`: `"mini" | "small" | "medium"` (default) `| "large"` · `fullWidth?` · `leadingIcon?`/`trailingIcon?: ReactNode` · plus `<button>` attrs.
+```tsx
+<Button color="primary" leadingIcon={<PlusIcon />}>Create</Button>
+<Button variant="outline" color="destructive">Delete</Button>
+```
+
+### IconButton
+`icon: ReactNode` (required) · `aria-label: string` (**required**) · `variant`: `"solid" | "outline" | "ghost"` · `size`: `"sm" | "md" | "lg"` · `round?`.
+```tsx
+<IconButton aria-label="Settings" icon={<GearIcon />} variant="ghost" />
+```
+
+### Badge
+`color`: `"neutral" | "brand" | "success" | "warning" | "danger" | "info"` · `variant`: `"solid" | "subtle"` · `size`: `"sm" | "md"` · `withDot?` · `icon?`.
+```tsx
+<Badge color="success" variant="subtle" withDot>Active</Badge>
+```
+
+### Input
+`size`: `"sm" | "md" | "lg"` · `invalid?` · `leadingIcon?`/`trailingIcon?` · plus `<input>` attrs.
+```tsx
+<Input placeholder="Email" leadingIcon={<MailIcon />} invalid={hasError} />
+```
+
+### Textarea
+`size`: `"sm" | "md" | "lg"` · `invalid?` · plus `<textarea>` attrs.
+
+### Select  (hybrid)
+`size`: `"sm" | "md" | "lg"` · `invalid?` · `placeholder?` · `<option>` children · plus `<select>` attrs (`value`/`defaultValue`/`onChange`/`name`/`disabled`).
+Renders a custom accessible listbox on desktop (pointer: fine) and the native `<select>` on touch/coarse pointers. `onChange` and form submission behave like a native `<select>` in both modes.
+```tsx
+<Select defaultValue="2" onChange={(e) => setVal(e.target.value)}>
+  <option value="">Select an option</option>
+  <option value="1">Option one</option>
+  <option value="2">Option two</option>
+  <option value="3" disabled>Option three</option>
+</Select>
+```
+
+### Checkbox
+`size`: `"sm" | "md"` · `indeterminate?` · `label?` · `description?` · plus `<input type=checkbox>` attrs (`checked`, `onChange`).
+```tsx
+<Checkbox label="Accept terms" description="Required to continue" />
+```
+
+### Radio / RadioGroup
+`Radio`: `size`: `"sm" | "md"` · `label?` · `description?` + `<input type=radio>` attrs.
+`RadioGroup`: `orientation`: `"vertical" | "horizontal"` · `name` · `<fieldset>` attrs.
+```tsx
+<RadioGroup name="plan" orientation="vertical">
+  <Radio value="free" label="Free" />
+  <Radio value="pro" label="Pro" />
+</RadioGroup>
+```
+
+### Switch
+`size`: `"sm" | "md"` · `label?` · plus `<input type=checkbox>` attrs.
+
+### Card  (+ CardTitle, CardDescription)
+`variant`: `"elevated" | "outlined" | "filled"` · `padding`: `"sm" | "md" | "lg"`.
+```tsx
+<Card variant="outlined" padding="md">
+  <CardTitle>Title</CardTitle>
+  <CardDescription>Supporting text</CardDescription>
+</Card>
+```
+
+### Alert
+`status`: `"info" | "success" | "warning" | "danger" | "neutral"` · `variant`: `"subtle" | "solid" | "outline"` · `title?` · `description?` · `icon?` · `action?` · `onClose?` (shows dismiss button).
+```tsx
+<Alert status="warning" title="Heads up" description="Check your settings." onClose={dismiss} />
+```
+
+### Toast
+`status`: `"info" | "success" | "warning" | "danger" | "neutral"` · `title?` · `description?` · `icon?` · `actionLabel?` · `onClose?`.
+
+### Modal
+`open: boolean` · `onClose: () => void` (both required) · `size`: `"sm" | "md" | "lg"` · `title?` · `footer?` · `showClose?` (default true) · `closeOnOverlay?` (default true) · `children`.
+```tsx
+<Modal open={open} onClose={() => setOpen(false)} title="Confirm" footer={<Button onClick={save}>Save</Button>}>
+  Are you sure?
+</Modal>
+```
+
+### Tabs  (+ TabList, Tab, TabPanel)
+`Tabs`: `value?`/`defaultValue?` · `onValueChange?: (value: string) => void` · `variant`: `"underline" | "pill"` · `size`: `"sm" | "md"`.
+`Tab` and `TabPanel` are matched by their `value` prop.
+```tsx
+<Tabs defaultValue="a" variant="pill">
+  <TabList>
+    <Tab value="a">Account</Tab>
+    <Tab value="b">Billing</Tab>
+  </TabList>
+  <TabPanel value="a">Account settings…</TabPanel>
+  <TabPanel value="b">Billing settings…</TabPanel>
+</Tabs>
+```
+
+### Tooltip
+`content: ReactNode` (required) · `side`: `"top"` (default) `| "bottom" | "left" | "right"` · `open?` (controlled) · wraps a single `children` trigger.
+```tsx
+<Tooltip content="Copy to clipboard"><IconButton aria-label="Copy" icon={<CopyIcon />} /></Tooltip>
+```
+
+### Avatar
+`size`: `"xs" | "sm" | "md" | "lg" | "xl"` · `shape`: `"circle" | "square"` · `src?` (image) · `initials?` · `icon?` (fallbacks in that priority).
+```tsx
+<Avatar src="/me.jpg" size="md" />
+<Avatar initials="MK" shape="square" />
+```
+
+### EmptyState
+`size`: `"sm" | "md" | "lg"` · `icon?` · `title?` · `description?` · `actions?`.
+
+### DropdownMenu  (+ MenuItem, MenuSeparator, MenuLabel)
+`DropdownMenu`: `trigger: ReactNode` (click is wired automatically) · `children`.
+`MenuItem`: `tone`: `"default" | "danger"` · `leadingIcon?` · `hint?` (right-aligned shortcut) · `disabled?` · `onClick`.
+```tsx
+<DropdownMenu trigger={<Button variant="outline">Actions</Button>}>
+  <MenuLabel>Account</MenuLabel>
+  <MenuItem leadingIcon={<UserIcon />}>Profile</MenuItem>
+  <MenuItem hint="⌘⌫" tone="danger">Delete</MenuItem>
+</DropdownMenu>
+```
+
+> Icons are consumer-provided `ReactNode`s (any SVG/icon component). Velys does not require a specific icon library.
