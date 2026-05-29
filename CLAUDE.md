@@ -1,11 +1,8 @@
 # Velys Design System
 
-This is a project to build the Velys design system. The mission and completion criteria follow `MISSION.md`.
+This is the Velys design system — a **vanilla-extract** React component library (`@velody/velys`) documented with **Storybook**, with its design source of truth in Figma.
 
-1. **Figma planning** — Plan all components from `MVP.md` in Figma, at a variant level usable by the MVP project.
-2. **Library implementation** — Implement the Figma plans as a component library based on **vanilla-extract**, package it as an installable package, and document it with **Storybook**.
-
-We are currently at stage 1 (Figma planning); there is no code implementation (package/repository) yet.
+The project is built and published. Design work happens in Figma first, then is implemented as code and documented in Storybook — use the `new-component` skill for that end-to-end flow.
 
 ## Source of Truth
 
@@ -15,9 +12,9 @@ We are currently at stage 1 (Figma planning); there is no code implementation (p
 - **Reference design system:** Vercel [Geist](https://vercel.com/geist) — the reference standard for color scale structure, light/dark modes, and component naming.
   - Geist page snapshots are kept in `.playwright-mcp/`.
 
-## MVP Scope
+## Components
 
-The list of components to build and their progress status are managed in `MVP.md` (17 types, including Button, Input, Select, Modal, Toast, etc.). When a component is completed, update the checkbox in `MVP.md`.
+The component inventory is the code itself (`src/components/`, exported from `src/index.ts`) plus the docs (`docs/components/`, `llms.txt`). The Figma spec for tokens and components lives in `design/DESIGN-SPEC.md`. To add a component, use the `new-component` skill.
 
 ## Figma Workflow
 
@@ -39,7 +36,7 @@ Principles:
 - **Documentation:** Storybook. Write stories per variant and state for each component.
 - **Distribution form:** Build it to be installable as an npm package (tree-shakeable, with `.d.ts` types provided).
 
-## Current Status Notes
+## Status
 
-- Not a git repository, no code/package yet. Work output mainly accumulates inside the Figma file.
-- When entering stage 2, bootstrap the repository with the stack above.
+- Published to npm as `@velody/velys`. Releases are automated via GitHub Actions on `vX.Y.Z` tags (`npm version patch|minor|major` on `main` → tag push → CI publishes via npm Trusted Publishing/OIDC, with provenance).
+- Storybook is deployed to Cloudflare Pages (`velys-storybook`).

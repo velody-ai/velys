@@ -1,6 +1,6 @@
 # Velys Design Spec (Stage 1 — Figma Planning Execution Plan)
 
-This document is the **execution spec** for Stage 1 of MISSION.md. Once `use_figma` is connected, tokens and components are created in Figma exactly as specified here. At the same time, it serves as the single source of truth for the Stage 2 vanilla-extract theme/components.
+This document is the **execution spec** for the Velys design system in Figma: tokens and components are created in Figma exactly as specified here. It also serves as the single source of truth for the vanilla-extract theme/components in code.
 
 - **Color source values**: `design/design-tokens.json` (Geist light/dark 92 colors + shadow/focus + spacing/radius/form/motion metadata). Validated to match the values of Figma's existing `Colors` collection (92 Variables, Light/Dark).
 - **Reference**: Vercel Geist. **Preserve existing assets**: the Figma `Colors` palette and Button are used/extended as-is.
@@ -110,7 +110,7 @@ This document is the **execution spec** for Stage 1 of MISSION.md. Once `use_fig
 
 ---
 
-## Part B — Components (17 types)
+## Part B — Components (19 components)
 
 Common rules
 - All fill/stroke/gap/padding/radius are **bound** to the tokens above (no hardcoding).
@@ -204,6 +204,11 @@ Common rules
 - **Variant**: `Variant`(Solid·Outline·Ghost)×`Size`(sm·md·lg = 32·40·48 square)×`State`(Default·Hover·Active·Disabled).
 - **Properties**: `icon`(INSTANCE_SWAP), `aria-label`(TEXT, for documentation).
 - **Bindings**: same tokens as Button, square + radius `md` (or `full` round variant), icon `text/primary`/Solid uses `accent/primary/fg`.
+
+### B19. Label (+ Field)
+- **Variant**: `Size`(sm·md·lg)×`State`(Default·Focus·Error·Disabled). Used with Input/Select/Textarea, wrapped together in a `Field`.
+- **Properties**: `text`(TEXT), `required`(BOOLEAN — red asterisk).
+- **Bindings**: Default `text/secondary`, Focus `brand/text`, Error `danger/text`, Disabled `text/disabled`. Weight medium, size = paired control's label size. The `Field` wrapper drives the color automatically — brand on `:focus-within`, red when invalid.
 
 ---
 

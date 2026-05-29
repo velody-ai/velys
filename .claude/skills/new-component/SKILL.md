@@ -5,7 +5,7 @@ description: Create a new Velys design-system component end-to-end — (1) desig
 
 # New Component (Figma → Code → Storybook)
 
-End-to-end workflow for adding one new component to the Velys design system. Velys is a vanilla-extract React library (`@velody/velys`) whose Figma file is the design source of truth. Read `AGENTS.md` and `docs/tokens.md` before starting — this skill assumes those conventions.
+End-to-end workflow for adding one new component to the Velys design system. Velys is a vanilla-extract React library (`@velody/velys`) whose Figma file is the design source of truth. Read `AGENTS.md`, `docs/tokens.md`, and `design/DESIGN-SPEC.md` before starting — this skill assumes those conventions.
 
 **Golden rule:** every visual value binds to an existing design token. Never hardcode hex/px, and never recreate the token foundations — they already exist in both code (`src/theme/theme.css.ts`, the `vars` object) and Figma (the `Color` / `Spacing` / `Radius` Variable collections).
 
@@ -56,8 +56,8 @@ Create `src/components/<Name>/<Name>.stories.tsx` (`title: "Components/<Name>"`)
 ## Phase 4 — Docs & validation
 
 1. `docs/components/<Name>.md` — **English** (all docs must be English). Match the existing component docs: short intro, `import { <Name> } from "@velody/velys";`, a Props table (Prop | Type | Default | Description), and an Examples code block.
-2. Add the component to `llms.txt` (one-line entry in the component list) and to the inlined reference `llms-full.txt`.
-3. Tick the component's checkbox in `MVP.md`.
+2. Add a `### B<N>. <Name>` entry to `design/DESIGN-SPEC.md` (Part B) — variant axes, properties, and token bindings, matching the existing entries — and bump the component count in the Part B heading.
+3. Add the component to `llms.txt` (one-line entry in the component list) and to the inlined reference `llms-full.txt`.
 4. **Validate:** `npm run typecheck` then `npm run build` (tsup — this is what surfaces vanilla-extract `.css.ts` errors; `tsc` alone does not compile them).
 5. Optional: refresh the docs site — `npm run build-storybook && npx wrangler pages deploy storybook-static --project-name velys-storybook --branch main --commit-dirty=true`.
 
@@ -66,5 +66,5 @@ Create `src/components/<Name>/<Name>.stories.tsx` (`title: "Components/<Name>"`)
 - [ ] Figma: dedicated page, variant set, properties, token-bound (no hardcoded values), screenshot looks right
 - [ ] Code: `<Name>.tsx` / `<Name>.css.ts` / `index.ts`, exported from `src/index.ts`, all visuals bound to `vars`
 - [ ] Stories cover variants + states
-- [ ] `docs/components/<Name>.md` (English) + `llms.txt` + `llms-full.txt` + `MVP.md`
+- [ ] `docs/components/<Name>.md` (English) + `design/DESIGN-SPEC.md` (Part B entry) + `llms.txt` + `llms-full.txt`
 - [ ] `npm run typecheck` and `npm run build` both pass
