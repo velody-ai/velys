@@ -53,12 +53,22 @@ Then add the component to the public barrel `src/index.ts` (both the value and `
 
 Create `src/components/<Name>/<Name>.stories.tsx` (`title: "Components/<Name>"`). Provide a `Playground` plus one story per meaningful axis/state (sizes, variants, states, disabled/error). Use the existing stories as the format reference. Light/Dark is handled globally by the toolbar theme toggle — no per-story theming needed.
 
-## Phase 4 — Docs & validation
+## Phase 4 — Tests
+
+Create `src/components/<Name>/<Name>.test.tsx`, mirroring `src/components/Button/Button.test.tsx` (the canonical template). The suite runs on **Vitest (jsdom) + React Testing Library + vitest-axe** — see the `## Testing` section in `CLAUDE.md` for the full conventions. Three sections:
+
+1. **RTL direct tests** — the component's real behavior: rendering, ARIA roles/attributes, event handlers, controlled/uncontrolled state, disabled/invalid states, keyboard/portal interactions. Test the actual API you just built — don't guess.
+2. **Story smoke tests** — `composeStories(stories)` from `@storybook/react` renders every named story export without throwing (assert the container is not empty). This reuses the Phase 3 stories as fixtures.
+3. **a11y** — `axe(container)` on one representative (visible) story with `expect(...).toHaveNoViolations()`. Make sure that story has accessible labels (e.g. an icon-only control needs `aria-label`).
+
+Conventions: Vitest globals are on (`describe/it/expect/vi` — no import); import only `render`/`screen` (`@testing-library/react`), `userEvent`, `axe` (`vitest-axe`), `composeStories` (`@storybook/react`), the component, and `* as stories`. Run `npm test` and fix until all pass — never leave a failing or skipped test.
+
+## Phase 5 — Docs & validation
 
 1. `docs/components/<Name>.md` — **English** (all docs must be English). Match the existing component docs: short intro, `import { <Name> } from "@velody/velys";`, a Props table (Prop | Type | Default | Description), and an Examples code block.
 2. Add a `### B<N>. <Name>` entry to `design/DESIGN-SPEC.md` (Part B) — variant axes, properties, and token bindings, matching the existing entries — and bump the component count in the Part B heading.
 3. Add the component to `llms.txt` (one-line entry in the component list) and to the inlined reference `llms-full.txt`.
-4. **Validate:** `npm run typecheck` then `npm run build` (tsup — this is what surfaces vanilla-extract `.css.ts` errors; `tsc` alone does not compile them).
+4. **Validate:** `npm test`, `npm run typecheck`, then `npm run build` (tsup — this is what surfaces vanilla-extract `.css.ts` errors; `tsc` alone does not compile them).
 5. Optional: refresh the docs site — `npm run build-storybook && npx wrangler pages deploy storybook-static --project-name velys-storybook --branch main --commit-dirty=true`.
 
 ## Checklist before calling it done
@@ -66,5 +76,6 @@ Create `src/components/<Name>/<Name>.stories.tsx` (`title: "Components/<Name>"`)
 - [ ] Figma: dedicated page, variant set, properties, token-bound (no hardcoded values), screenshot looks right
 - [ ] Code: `<Name>.tsx` / `<Name>.css.ts` / `index.ts`, exported from `src/index.ts`, all visuals bound to `vars`
 - [ ] Stories cover variants + states
+- [ ] `<Name>.test.tsx` added (RTL + story smoke + axe), all tests pass
 - [ ] `docs/components/<Name>.md` (English) + `design/DESIGN-SPEC.md` (Part B entry) + `llms.txt` + `llms-full.txt`
-- [ ] `npm run typecheck` and `npm run build` both pass
+- [ ] `npm test`, `npm run typecheck`, and `npm run build` all pass

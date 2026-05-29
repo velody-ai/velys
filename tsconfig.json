@@ -12,6 +12,7 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    "types": ["vitest/globals"],
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -19,5 +20,5 @@
     "declaration": true,
     "esModuleInterop": true
   },
-  "include": ["src", ".storybook"]
+  "include": ["src", ".storybook", "vitest.config.ts", "vitest.setup.ts"]
 }
