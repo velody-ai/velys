@@ -86,3 +86,25 @@ export type {
 } from "./components/Accordion";
 export { Label, Field } from "./components/Label";
 export type { LabelProps, FieldProps } from "./components/Label";
+export { Slider } from "./components/Slider";
+export type { SliderProps } from "./components/Slider";
+export { Separator } from "./components/Separator";
+export type { SeparatorProps } from "./components/Separator";
+export {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./components/Breadcrumb";
+export type {
+  BreadcrumbProps,
+  BreadcrumbListProps,
+  BreadcrumbItemProps,
+  BreadcrumbLinkProps,
+  BreadcrumbPageProps,
+  BreadcrumbSeparatorProps,
+} from "./components/Breadcrumb";
+export { Pagination, getPaginationRange } from "./components/Pagination";
+export type { PaginationProps } from "./components/Pagination";
