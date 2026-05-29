@@ -62,5 +62,27 @@ export { DropdownMenu, Menu, MenuItem, MenuSeparator, MenuLabel } from "./compon
 export type { DropdownMenuProps, MenuProps, MenuItemProps } from "./components/DropdownMenu";
 export { Modal } from "./components/Modal";
 export type { ModalProps } from "./components/Modal";
+export { Drawer } from "./components/Drawer";
+export type { DrawerProps } from "./components/Drawer";
+export { Popover, PopoverTrigger, PopoverContent } from "./components/Popover";
+export type {
+  PopoverProps,
+  PopoverTriggerProps,
+  PopoverContentProps,
+  PopoverSide,
+  PopoverAlign,
+} from "./components/Popover";
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "./components/Accordion";
+export type {
+  AccordionProps,
+  AccordionItemProps,
+  AccordionTriggerProps,
+  AccordionContentProps,
+} from "./components/Accordion";
 export { Label, Field } from "./components/Label";
 export type { LabelProps, FieldProps } from "./components/Label";

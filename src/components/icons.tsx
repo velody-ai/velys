@@ -25,6 +25,32 @@ export const ChevronDownIcon = (p: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+export const ChevronRightIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base} {...p}>
+    <path d="M6 4l4 4-4 4" />
+  </svg>
+);
+
+export const ChevronLeftIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base} {...p}>
+    <path d="M10 4l-4 4 4 4" />
+  </svg>
+);
+
+export const ChevronUpIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base} {...p}>
+    <path d="M4 10l4-4 4 4" />
+  </svg>
+);
+
+export const MoreHorizontalIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base} {...p}>
+    <circle cx="3" cy="8" r="0.8" />
+    <circle cx="8" cy="8" r="0.8" />
+    <circle cx="13" cy="8" r="0.8" />
+  </svg>
+);
+
 export const CloseIcon = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base} {...p}>
     <path d="M4 4l8 8M12 4l-8 8" />
