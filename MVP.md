@@ -20,3 +20,4 @@
 - [x] Tooltip
 - [x] Alert
 - [x] Icon Button
+- [x] Label (+ Field)

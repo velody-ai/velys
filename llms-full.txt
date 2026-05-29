@@ -184,4 +184,14 @@ Renders a custom accessible listbox on desktop (pointer: fine) and the native `<
 </DropdownMenu>
 ```
 
+### Label  (+ Field)
+`Label`: `size`: `"sm" | "md" | "lg"` · `error?` · `required?` (red asterisk) · `disabled?` · `htmlFor` + `<label>` attrs.
+`Field`: `invalid?` · `disabled?` + `<div>` attrs — wraps a label + control; the nested Label turns brand-colored on `:focus-within` and red when `invalid`.
+```tsx
+<Field invalid={hasError}>
+  <Label htmlFor="email" required>Email</Label>
+  <Input id="email" invalid={hasError} />
+</Field>
+```
+
 > Icons are consumer-provided `ReactNode`s (any SVG/icon component). Velys does not require a specific icon library.

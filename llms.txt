@@ -47,6 +47,7 @@ export default function App() {
 - [Tooltip](docs/components/Tooltip.md): hover tooltip (4 directions)
 - [DropdownMenu](docs/components/DropdownMenu.md): dropdown menu (Menu/MenuItem/MenuSeparator/MenuLabel)
 - [Modal](docs/components/Modal.md): modal dialog (portal, controlled)
+- [Label](docs/components/Label.md): form label (+ Field wrapper) — brand on focus, red on invalid
 
 ## Tokens
 

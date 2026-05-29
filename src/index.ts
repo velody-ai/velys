@@ -38,3 +38,5 @@ export { DropdownMenu, Menu, MenuItem, MenuSeparator, MenuLabel } from "./compon
 export type { DropdownMenuProps, MenuProps, MenuItemProps } from "./components/DropdownMenu";
 export { Modal } from "./components/Modal";
 export type { ModalProps } from "./components/Modal";
+export { Label, Field } from "./components/Label";
+export type { LabelProps, FieldProps } from "./components/Label";
