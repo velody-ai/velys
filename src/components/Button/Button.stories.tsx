@@ -42,3 +42,19 @@ export const Sizes: Story = {
 };
 
 export const Disabled: Story = { args: { disabled: true } };
+
+export const Loading: Story = {
+  render: (args) => (
+    <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+      <Button {...args} loading>
+        Saving
+      </Button>
+      <Button {...args} loading variant="outline">
+        Saving
+      </Button>
+      <Button {...args} loading variant="ghost">
+        Saving
+      </Button>
+    </div>
+  ),
+};

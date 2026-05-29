@@ -7,7 +7,7 @@ import { Button } from "./Button";
 import * as stories from "./Button.stories";
 
 // Reuse the Storybook stories as test fixtures (theme decorator + args applied).
-const { Playground, Colors, Sizes, Disabled } = composeStories(stories);
+const { Playground, Colors, Sizes, Disabled, Loading } = composeStories(stories);
 
 describe("Button", () => {
   it("renders its children inside a button element", () => {
@@ -45,6 +45,20 @@ describe("Button", () => {
     expect(screen.getByRole("button")).toHaveClass("my-class");
   });
 
+  it("disables the button and marks it busy while loading", async () => {
+    const onClick = vi.fn();
+    render(
+      <Button loading onClick={onClick}>
+        Saving
+      </Button>,
+    );
+    const btn = screen.getByRole("button");
+    expect(btn).toBeDisabled();
+    expect(btn).toHaveAttribute("aria-busy", "true");
+    await userEvent.click(btn);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
   it("renders leading and trailing icon slots", () => {
     render(
       <Button leadingIcon={<span data-testid="lead" />} trailingIcon={<span data-testid="trail" />}>
@@ -63,6 +77,7 @@ describe("Button stories", () => {
     ["Colors", Colors],
     ["Sizes", Sizes],
     ["Disabled", Disabled],
+    ["Loading", Loading],
   ])("renders the %s story", (_name, Story) => {
     const { container } = render(<Story />);
     expect(container).not.toBeEmptyDOMElement();
