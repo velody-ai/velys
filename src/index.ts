@@ -46,6 +46,23 @@ export { Switch } from "./components/Switch";
 export type { SwitchProps } from "./components/Switch";
 export { Card, CardTitle, CardDescription } from "./components/Card";
 export type { CardProps } from "./components/Card";
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableCaption,
+} from "./components/Table";
+export type {
+  TableProps,
+  TableRowProps,
+  TableHeadProps,
+  TableCellProps,
+  TableCaptionProps,
+} from "./components/Table";
 export { Avatar } from "./components/Avatar";
 export type { AvatarProps } from "./components/Avatar";
 export { Alert } from "./components/Alert";
