@@ -2,6 +2,24 @@ import "./theme/global.css";
 
 export { vars, lightThemeClass, darkThemeClass } from "./theme/theme.css";
 
+export { VelysProvider } from "./provider";
+export type {
+  VelysProviderProps,
+  ThemeMode,
+  ThemeContextValue,
+  ToastOptions,
+  ToastStatus,
+  ToastContextValue,
+} from "./provider";
+
+export { useDisclosure, useMediaQuery, usePrefersDark, useTheme, useToast } from "./hooks";
+export type { UseDisclosureOptions, UseDisclosureReturn } from "./hooks";
+
+export { Text, Code, Kbd } from "./components/Text";
+export type { TextProps, CodeProps, KbdProps } from "./components/Text";
+export { Heading } from "./components/Heading";
+export type { HeadingProps } from "./components/Heading";
+
 export { Button } from "./components/Button";
 export type { ButtonProps } from "./components/Button";
 export { IconButton } from "./components/IconButton";

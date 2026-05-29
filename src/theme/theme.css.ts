@@ -61,6 +61,26 @@ const font = {
   },
 } as const;
 
+/**
+ * 모션 토큰 — light/dark 공통(모드 무관). duration/easing을 한 곳에서 관리해
+ * 오버레이(Modal/Drawer/Popover)·디스클로저(Accordion)·상태 전환에서 재사용한다.
+ */
+const motion = {
+  duration: {
+    instant: "0ms",
+    fast: "100ms",
+    base: "150ms",
+    slow: "250ms",
+    slower: "400ms",
+  },
+  easing: {
+    standard: "cubic-bezier(0.2, 0, 0, 1)",
+    emphasized: "cubic-bezier(0.3, 0, 0, 1)",
+    decelerate: "cubic-bezier(0, 0, 0, 1)",
+    accelerate: "cubic-bezier(0.3, 0, 1, 1)",
+  },
+} as const;
+
 const shadow = {
   light: {
     sm: "0px 2px 2px #0000000a",
@@ -185,6 +205,7 @@ export const [lightThemeClass, vars] = createTheme({
   space,
   radius,
   font,
+  motion,
   shadow: shadow.light,
 });
 
@@ -193,5 +214,6 @@ export const darkThemeClass = createTheme(vars, {
   space,
   radius,
   font,
+  motion,
   shadow: shadow.dark,
 });
