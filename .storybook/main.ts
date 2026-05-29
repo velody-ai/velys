@@ -3,7 +3,7 @@ import { mergeConfig } from "vite";
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 
 const config: StorybookConfig = {
-  stories: ["../src/**/*.stories.@(ts|tsx)"],
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(ts|tsx)"],
   addons: ["@storybook/addon-essentials"],
   framework: { name: "@storybook/react-vite", options: {} },
   async viteFinal(cfg) {

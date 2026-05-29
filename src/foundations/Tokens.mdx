@@ -1,0 +1,288 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Foundations/Token Guide" />
+
+export const Sw = ({ c }) => (
+  <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+    <span style={{ width: 12, height: 12, borderRadius: 3, border: "1px solid #8884", background: c }} />
+    <code>{c}</code>
+  </span>
+);
+
+export const ColorTable = ({ rows, use = true }) => (
+  <table style={{ borderCollapse: "collapse", width: "100%", margin: "8px 0 24px", fontSize: 13 }}>
+    <thead>
+      <tr>
+        {["Token", "Light", "Dark", use ? "Use for" : null].filter(Boolean).map((h) => (
+          <th key={h} style={{ textAlign: "left", padding: "6px 10px", borderBottom: "2px solid #8883", whiteSpace: "nowrap" }}>{h}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr key={r[0]}>
+          <td style={{ padding: "6px 10px", borderBottom: "1px solid #8882" }}><code>{r[0]}</code></td>
+          <td style={{ padding: "6px 10px", borderBottom: "1px solid #8882" }}><Sw c={r[1]} /></td>
+          <td style={{ padding: "6px 10px", borderBottom: "1px solid #8882" }}><Sw c={r[2]} /></td>
+          {use && <td style={{ padding: "6px 10px", borderBottom: "1px solid #8882" }}>{r[3]}</td>}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+);
+
+export const ScaleTable = ({ rows }) => (
+  <table style={{ borderCollapse: "collapse", width: "100%", margin: "8px 0 24px", fontSize: 13 }}>
+    <thead>
+      <tr>
+        {["Token", "Value", "Note"].map((h) => (
+          <th key={h} style={{ textAlign: "left", padding: "6px 10px", borderBottom: "2px solid #8883" }}>{h}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr key={r[0]}>
+          <td style={{ padding: "6px 10px", borderBottom: "1px solid #8882" }}><code>{r[0]}</code></td>
+          <td style={{ padding: "6px 10px", borderBottom: "1px solid #8882" }}><code>{r[1]}</code></td>
+          <td style={{ padding: "6px 10px", borderBottom: "1px solid #8882", color: "#888" }}>{r[2] || ""}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+);
+
+# Design Tokens (`vars`)
+
+Every visual value in Velys is a design token, exposed as the `vars` object and mirroring the Figma Variables (`Color` / `Spacing` / `Radius`) 1:1.
+
+```tsx
+import { vars } from "@velody/velys";
+```
+
+`vars.*` values are **CSS variable references**, so the actual value is resolved by the nearest applied theme class. Always reference tokens through the `vars` object — never hardcode hex/px, and never type the raw `--…` variable names yourself.
+
+> Want to *see* the tokens live? Use the **Foundations → Tokens** stories for swatches, and toggle the **Theme (Light/Dark)** control in the toolbar.
+
+## Setup recap (required for tokens to resolve)
+
+```tsx
+import "@velody/velys/styles.css";          // load the extracted CSS once
+import { lightThemeClass, darkThemeClass } from "@velody/velys";
+
+// apply a theme class on an ancestor (prefer <html>/<body> so portals inherit it)
+<div className={lightThemeClass}>…</div>
+```
+
+Switch `lightThemeClass` ↔ `darkThemeClass` to change mode. The same `vars.*` reference resolves to the light or dark value automatically.
+
+## How to use tokens
+
+```tsx
+// 1) Inline style
+<div style={{ background: vars.color.bg.subtle, padding: vars.space.md }} />
+
+// 2) vanilla-extract style()
+import { style } from "@vanilla-extract/css";
+export const card = style({
+  background: vars.color.bg.default,
+  border: `1px solid ${vars.color.border.default}`,
+  borderRadius: vars.radius.lg,
+  boxShadow: vars.shadow.md,
+  padding: vars.space.lg,
+  color: vars.color.text.primary,
+});
+```
+
+> Keys that start with a digit need bracket access: `vars.space["2xl"]`, `vars.radius["2xl"]`, `vars.font.size["3xl"]`.
+
+---
+
+## Color — `vars.color.*`
+
+### bg — `vars.color.bg.*`
+
+In **dark mode** `canvas` (page floor) is darker than `default` (the surface on it), so surfaces appear to float.
+
+<ColorTable rows={[
+  ["bg.canvas", "#ffffff", "#030706", "Page/app floor (backmost layer)"],
+  ["bg.default", "#ffffff", "#060e0d", "Default surface — cards, panels, inputs, modals, control fills"],
+  ["bg.subtle", "#fafafa", "#0e1614", "Secondary surface, one step up"],
+  ["bg.muted", "#f4f4f5", "#172220", "More emphasized fill"],
+  ["bg.hover", "#fafafa", "#111c19", "Hover background (ghost/outline, menu items)"],
+  ["bg.active", "#f4f4f5", "#1c2825", "Active/selected background"],
+  ["bg.inverse", "#18181b", "#ffffff", "High-contrast inverted surface"],
+  ["bg.overlay", "#0000004d", "#00000080", "Modal/dialog backdrop"],
+  ["bg.disabled", "#fafafa", "#0e1614", "Disabled control fill"],
+]} />
+
+### text — `vars.color.text.*`
+
+<ColorTable rows={[
+  ["text.primary", "#18181b", "#fafafa", "Body and headings"],
+  ["text.secondary", "#71717a", "#d4d4d8", "Secondary text"],
+  ["text.tertiary", "#a1a1aa", "#a1a1aa", "Captions, hints"],
+  ["text.disabled", "#d4d4d8", "#71717a", "Disabled text"],
+  ["text.placeholder", "#d4d4d8", "#71717a", "Input placeholder"],
+  ["text.onBrand", "#ffffff", "#ffffff", "Text on a brand/solid fill"],
+  ["text.inverse", "#ffffff", "#18181b", "Text on bg.inverse"],
+]} />
+
+### icon — `vars.color.icon.*`
+
+<ColorTable rows={[
+  ["icon.default", "#71717a", "#d4d4d8", "Default icon color"],
+  ["icon.muted", "#d4d4d8", "#71717a", "De-emphasized icons (chevrons)"],
+]} />
+
+### brand — `vars.color.brand.*` (teal accent)
+
+<ColorTable rows={[
+  ["brand.solid", "#12a594", "#12a594", "Primary solid fill"],
+  ["brand.solidHover", "#0d8c7d", "#0ac7b4", "Hover for solid fill"],
+  ["brand.subtle", "#eefcf9", "#04201b", "Subtle brand background"],
+  ["brand.text", "#12a594", "#0ac7b4", "Brand-colored text/links"],
+  ["brand.border", "#12a594", "#12a594", "Brand border"],
+]} />
+
+### border — `vars.color.border.*`
+
+<ColorTable rows={[
+  ["border.default", "#e4e4e7", "#52525b", "Default border"],
+  ["border.strong", "#d4d4d8", "#71717a", "Stronger/hover border"],
+  ["border.subtle", "#f4f4f5", "#3f3f46", "Subtle divider"],
+  ["border.focus", "#12a594", "#12a594", "Focus border (pair with shadow.focus)"],
+]} />
+
+### status — `success` / `warning` / `danger` / `info`
+
+Each group exposes `solid`, `subtle`, `text`, `border` (`danger` also has `solidHover`).
+
+<ColorTable use={false} rows={[
+  ["success.solid", "#17c964", "#17c964"],
+  ["success.subtle", "#e6f9ed", "#052e16"],
+  ["success.text", "#12a150", "#66db93"],
+  ["success.border", "#99e7b7", "#0e7a3c"],
+  ["warning.solid", "#f5a623", "#f5a623"],
+  ["warning.subtle", "#fff6e5", "#3a2407"],
+  ["warning.text", "#c4831c", "#ffc666"],
+  ["warning.border", "#ffd999", "#956115"],
+  ["danger.solid", "#e5484d", "#fa383e"],
+  ["danger.solidHover", "#c4282d", "#ff666c"],
+  ["danger.subtle", "#ffe5e6", "#3a0b0c"],
+  ["danger.text", "#c4282d", "#ff666c"],
+  ["danger.border", "#ff999d", "#951e22"],
+  ["info.solid", "#0070f3", "#338eff"],
+  ["info.subtle", "#e5f1ff", "#001b3a"],
+  ["info.text", "#005cc4", "#66aaff"],
+  ["info.border", "#99c7ff", "#004695"],
+]} />
+
+---
+
+## Spacing — `vars.space.*`
+
+<ScaleTable rows={[
+  ["none", "0", ""],
+  ["xxs", "2px", ""],
+  ["xs", "4px", ""],
+  ["sm", "8px", ""],
+  ["md", "12px", ""],
+  ["lg", "16px", ""],
+  ["xl", "24px", ""],
+  ['["2xl"]', "32px", "bracket access"],
+  ['["3xl"]', "48px", "bracket access"],
+  ['["4xl"]', "64px", "bracket access"],
+]} />
+
+## Radius — `vars.radius.*`
+
+<ScaleTable rows={[
+  ["none", "0", ""],
+  ["sm", "4px", ""],
+  ["md", "6px", "control default"],
+  ["lg", "8px", ""],
+  ["xl", "12px", ""],
+  ['["2xl"]', "16px", "bracket access"],
+  ["full", "9999px", "pills/circles"],
+]} />
+
+## Font — `vars.font.*`
+
+- `family.sans` (Inter stack), `family.mono` (Geist Mono stack)
+- `weight`: `regular` 400 · `medium` 500 · `semibold` 600 · `bold` 700
+
+<ScaleTable rows={[
+  ["size.xs / lineHeight.xs", "12 / 16", ""],
+  ["size.sm / lineHeight.sm", "13 / 18", ""],
+  ["size.md / lineHeight.md", "14 / 20", "body default"],
+  ["size.lg / lineHeight.lg", "16 / 24", ""],
+  ["size.xl / lineHeight.xl", "20 / 28", ""],
+  ['size["2xl"] / lineHeight["2xl"]', "24 / 32", ""],
+  ['size["3xl"] / lineHeight["3xl"]', "32 / 40", ""],
+  ["size.display / lineHeight.display", "48 / 56", ""],
+]} />
+
+## Shadow — `vars.shadow.*`
+
+<ScaleTable rows={[
+  ["sm", "—", "subtle lift"],
+  ["md", "—", "cards (elevated)"],
+  ["lg", "—", "higher elevation"],
+  ["xl", "—", "fullscreen / large surfaces"],
+  ["menu", "—", "dropdown / select popups"],
+  ["modal", "—", "modal dialogs"],
+  ["tooltip", "—", "tooltips"],
+  ["focus", "—", "teal focus ring (pair with border.focus)"],
+]} />
+
+Light and dark have separate shadow values; reference via `vars.shadow.<name>`.
+
+---
+
+## Recipes
+
+```tsx
+// Focus ring (keyboard focus)
+selectors: { "&:focus-visible": { borderColor: vars.color.border.focus, boxShadow: vars.shadow.focus } }
+
+// Primary (brand) button surface — hover → vars.color.brand.solidHover
+{ background: vars.color.brand.solid, color: vars.color.text.onBrand }
+
+// Tinted status banner (e.g. success)
+{ background: vars.color.success.subtle, color: vars.color.success.text, border: `1px solid ${vars.color.success.border}` }
+
+// Elevated card
+{ background: vars.color.bg.default, borderRadius: vars.radius.lg, boxShadow: vars.shadow.md, padding: vars.space.lg }
+```
+
+## Override the brand tokens (re-theming)
+
+The brand accent is teal by default. Token values are vanilla-extract CSS variables with hashed names, so override them through the exported `vars` references with `assignInlineVars` — you never need to know the generated variable names.
+
+```tsx
+// npm i @vanilla-extract/dynamic
+import { assignInlineVars } from "@vanilla-extract/dynamic";
+import { vars } from "@velody/velys";
+
+// Scope the override to any subtree. Everything inside (buttons, links,
+// focus rings, etc.) now uses purple instead of teal.
+<div
+  style={assignInlineVars({
+    [vars.color.brand.solid]: "#7c3aed",
+    [vars.color.brand.solidHover]: "#6d28d9",
+    [vars.color.brand.subtle]: "#f3e8ff",
+    [vars.color.brand.text]: "#7c3aed",
+    [vars.color.brand.border]: "#7c3aed",
+    // the focus ring uses the brand color too — override for consistency
+    [vars.color.border.focus]: "#7c3aed",
+    [vars.shadow.focus]: "0 0 0 3px #7c3aed40",
+  })}
+>
+  {/* …app… */}
+</div>
+```
+
+- **App-wide:** apply the same `style={...}` on a top-level element (prefer `<html>`/`<body>` so portal content — Modal/Toast/Tooltip — inherits it).
+- **Per mode:** the override is a single value, so set different values under `lightThemeClass` vs `darkThemeClass` subtrees if you need a different brand per mode.
+- **Full custom theme:** for a complete palette swap, build your own theme class with `createTheme(vars, { color: {...}, space, radius, font, shadow })` and apply it instead of `lightThemeClass`.

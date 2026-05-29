@@ -1,9 +1,12 @@
 {
   "name": "@velody/velys",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Velys Design System — vanilla-extract React component library",
   "license": "MIT",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": [
     "**/*.css",
     "**/*.css.ts"
