@@ -32,6 +32,7 @@
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",
+    "postversion": "git push --follow-tags",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },

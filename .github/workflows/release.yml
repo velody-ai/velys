@@ -1,0 +1,30 @@
+name: Release
+
+# Publishes to npm whenever a version tag (vX.Y.Z) is pushed.
+# Flow: `npm version patch|minor|major` on main → tag is pushed → this runs.
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # enables npm provenance
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: "https://registry.npmjs.org"
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm publish --access public --provenance
+        env:
+          # Repo secret: an npm Granular Access Token with "bypass 2FA" + read/write
+          # to @velody/velys (or an Automation token). Lets CI publish without an OTP.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
