@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useId, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import * as css from "./Modal.css";
 import { CloseIcon } from "../icons";
@@ -27,6 +27,7 @@ export function Modal({
   children,
   closeOnOverlay = true,
 }: ModalProps) {
+  const titleId = useId();
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -42,11 +43,16 @@ export function Modal({
         className={css.panel({ size })}
         role="dialog"
         aria-modal="true"
+        aria-labelledby={title ? titleId : undefined}
         onClick={(e) => e.stopPropagation()}
       >
         {(title || showClose) && (
           <div className={css.header}>
-            {title && <h2 className={css.title}>{title}</h2>}
+            {title && (
+              <h2 id={titleId} className={css.title}>
+                {title}
+              </h2>
+            )}
             {showClose && (
               <button type="button" className={css.close} aria-label="Close" onClick={onClose}>
                 <CloseIcon />

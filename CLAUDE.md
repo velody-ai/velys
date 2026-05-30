@@ -36,6 +36,22 @@ Principles:
 - **Documentation:** Storybook. Write stories per variant and state for each component.
 - **Distribution form:** Build it to be installable as an npm package (tree-shakeable, with `.d.ts` types provided).
 
+## Testing
+
+Components are tested with **Vitest (jsdom) + React Testing Library**, reusing Storybook stories as fixtures and checking accessibility with **vitest-axe** (axe-core).
+
+- **Run:** `npm test` (single run) · `npm run test:watch` (watch). Config: `vitest.config.ts` (jsdom + the React and vanilla-extract Vite plugins so `.css.ts` resolves); global setup: `vitest.setup.ts`.
+- **Location:** one `src/components/{Name}/{Name}.test.tsx` per component, colocated with the source.
+- **Each test file has three sections** (see `src/components/Button/Button.test.tsx` as the canonical template):
+  1. **RTL direct tests** — real behavior of the component's actual API: rendering, ARIA roles/attributes, event handlers, controlled/uncontrolled state, disabled/invalid states, keyboard/portal interactions. Read the source; don't guess props.
+  2. **Story smoke tests** — `composeStories(stories)` from `@storybook/react` renders every named story export without throwing. Stories double as test fixtures, so they don't need rewriting.
+  3. **a11y** — `axe(container)` on one representative (visible) story with `expect(...).toHaveNoViolations()`.
+- **Conventions:**
+  - Vitest globals are on (`describe/it/expect/vi` — no import). Import only `render`/`screen` (`@testing-library/react`), `userEvent` (`@testing-library/user-event`), `axe` (`vitest-axe`), `composeStories` (`@storybook/react`), plus the component and `* as stories`.
+  - `vitest.setup.ts` calls `setProjectAnnotations(preview)`, so the theme decorator from `.storybook/preview.tsx` applies to composed stories automatically.
+  - The `vitest-axe` matcher type is re-declared for Vitest 2.x in `src/types/vitest-axe.d.ts`.
+- **Known noise:** axe's color-contrast probe logs a harmless `HTMLCanvasElement.getContext` warning under jsdom (no canvas) and that rule is skipped — pixel/contrast checks belong to visual-regression testing, which is not set up yet. When adding a component (`new-component` skill) or editing one (`edit-component` skill), add/update its `.test.tsx` alongside the code and stories.
+
 ## Status
 
 - Published to npm as `@velody/velys`. Releases are automated via GitHub Actions on `vX.Y.Z` tags (`npm version patch|minor|major` on `main` → tag push → CI publishes via npm Trusted Publishing/OIDC, with provenance).

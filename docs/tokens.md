@@ -175,6 +175,27 @@ Elevation and effects. Light and dark have separate values.
 
 ---
 
+## Motion — `vars.motion.*`
+Transition timing. Mode-independent (identical in light and dark).
+
+| Token | Value | Use for |
+|---|---|---|
+| `duration.instant` | `0ms` | No animation |
+| `duration.fast` | `100ms` | Hover/press feedback |
+| `duration.base` | `150ms` | Default UI transitions |
+| `duration.slow` | `250ms` | Overlays, expand/collapse |
+| `duration.slower` | `400ms` | Drawer/sheet slides |
+| `easing.standard` | `cubic-bezier(0.2, 0, 0, 1)` | Most transitions |
+| `easing.emphasized` | `cubic-bezier(0.3, 0, 0, 1)` | Entering large surfaces |
+| `easing.decelerate` | `cubic-bezier(0, 0, 0, 1)` | Elements entering the screen |
+| `easing.accelerate` | `cubic-bezier(0.3, 0, 1, 1)` | Elements leaving the screen |
+
+```ts
+transition: `opacity ${vars.motion.duration.base} ${vars.motion.easing.standard}`
+```
+
+---
+
 ## Recipes
 
 ```tsx

@@ -48,7 +48,24 @@ export default function App() {
 - [DropdownMenu](docs/components/DropdownMenu.md): dropdown menu (Menu/MenuItem/MenuSeparator/MenuLabel)
 - [Modal](docs/components/Modal.md): modal dialog (portal, controlled)
 - [Label](docs/components/Label.md): form label (+ Field wrapper) — brand on focus, red on invalid
+- [Text](docs/components/Text.md): semantic body/inline text (size/weight/tone) + Code/Kbd
+- [Heading](docs/components/Heading.md): section heading (level h1–h4, display size)
+- [Spinner](docs/components/Spinner.md): indeterminate loading indicator (sm/md/lg)
+- [Progress](docs/components/Progress.md): linear + CircularProgress (determinate/indeterminate)
+- [Skeleton](docs/components/Skeleton.md): loading placeholder (text/rectangular/circular)
+- [Popover](docs/components/Popover.md): floating panel (compound, portal, side/align)
+- [Drawer](docs/components/Drawer.md): edge-anchored sheet (left/right/top/bottom, portal)
+- [Accordion](docs/components/Accordion.md): collapsible sections (single/multiple)
+- [Separator](docs/components/Separator.md): divider (horizontal/vertical)
+- [Breadcrumb](docs/components/Breadcrumb.md): navigation trail (compound)
+- [Pagination](docs/components/Pagination.md): page navigation with truncated ranges
+- [Slider](docs/components/Slider.md): single-value range slider (keyboard + pointer)
+- [Table](docs/components/Table.md): data table (compound, striped/interactive rows)
+
+## Providers & Hooks
+
+- [Providers & Hooks](docs/providers.md): `VelysProvider` (theme + toast host), `useTheme`, `useToast`, `useDisclosure`, `useMediaQuery`/`usePrefersDark`
 
 ## Tokens
 
-- [Design tokens](docs/tokens.md): the full set of color (light/dark), space, radius, font, and shadow tokens exposed via `vars`
+- [Design tokens](docs/tokens.md): the full set of color (light/dark), space, radius, font, motion (duration/easing), and shadow tokens exposed via `vars`
