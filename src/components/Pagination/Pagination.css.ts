@@ -24,13 +24,22 @@ export const item = recipe({
     color: vars.color.text.primary,
     border: `1px solid transparent`,
     borderRadius: vars.radius.sm,
-    transition: `background-color ${vars.motion.duration.base} ${vars.motion.easing.standard}`,
+    transition: `background-color ${vars.motion.duration.base} ${vars.motion.easing.standard}, opacity ${vars.motion.duration.base} ${vars.motion.easing.standard}`,
     selectors: {
-      "&:hover:not([aria-disabled='true'])": { backgroundColor: vars.color.bg.hover },
+      // Non-current items get a subtle hover surface.
+      "&:hover:not([aria-disabled='true']):not([aria-current='page'])": {
+        backgroundColor: vars.color.bg.hover,
+      },
       "&:focus-visible": { outline: "none", boxShadow: vars.shadow.focus },
       "&[aria-current='page']": {
         backgroundColor: vars.color.bg.inverse,
         color: vars.color.text.inverse,
+      },
+      // Current page: keep the inverse surface but fade it slightly so it reads
+      // as hover (lighter in light mode, darker in dark mode) without the text
+      // losing contrast against a light hover background.
+      "&[aria-current='page']:hover:not([aria-disabled='true'])": {
+        opacity: 0.85,
       },
       "&[aria-disabled='true']": { cursor: "not-allowed", color: vars.color.text.disabled },
     },
