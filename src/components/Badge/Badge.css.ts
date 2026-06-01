@@ -3,7 +3,7 @@ import { vars } from "../../theme/theme.css";
 
 const colors = {
   neutral: { subtleBg: vars.color.bg.muted, subtleText: vars.color.text.secondary, solidBg: vars.color.bg.inverse, solidText: vars.color.text.inverse },
-  brand: { subtleBg: vars.color.brand.subtle, subtleText: vars.color.brand.text, solidBg: vars.color.brand.solid, solidText: vars.color.text.onBrand },
+  brand: { subtleBg: vars.color.brand.subtle, subtleText: vars.color.brand.text, solidBg: vars.color.brand.solid, solidText: vars.color.brand.onSolid },
   success: { subtleBg: vars.color.success.subtle, subtleText: vars.color.success.text, solidBg: vars.color.success.solid, solidText: vars.color.text.onBrand },
   warning: { subtleBg: vars.color.warning.subtle, subtleText: vars.color.warning.text, solidBg: vars.color.warning.solid, solidText: vars.color.text.onBrand },
   danger: { subtleBg: vars.color.danger.subtle, subtleText: vars.color.danger.text, solidBg: vars.color.danger.solid, solidText: vars.color.text.onBrand },

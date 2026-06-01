@@ -81,11 +81,12 @@ The background scale is an elevation ramp. In **dark mode** `canvas` (page floor
 ### brand — `vars.color.brand.*` (teal accent)
 | Token | light | dark | Use for |
 |---|---|---|---|
-| `brand.solid` | `#12a594` | `#12a594` | Primary solid fill |
-| `brand.solidHover` | `#0d8c7d` | `#0ac7b4` | Hover for solid fill |
+| `brand.solid` | `#12a594` | `#61d1c4` | Primary solid fill (dark: lighter/desaturated per dark-mode best practice) |
+| `brand.solidHover` | `#0d8c7d` | `#7ddccf` | Hover for solid fill |
 | `brand.subtle` | `#eefcf9` | `#04201b` | Subtle brand background |
 | `brand.text` | `#12a594` | `#0ac7b4` | Brand-colored text/links |
 | `brand.border` | `#12a594` | `#12a594` | Brand border |
+| `brand.onSolid` | `#ffffff` | `#18181b` | Foreground (text/icon) on a `brand.solid` fill — dark text in dark mode |
 
 ### border — `vars.color.border.*`
 | Token | light | dark | Use for |
@@ -222,7 +223,7 @@ transition: `opacity ${vars.motion.duration.base} ${vars.motion.easing.standard}
 selectors: { "&:focus-visible": { borderColor: vars.color.border.focus, boxShadow: vars.shadow.focus } }
 
 // Primary (brand) button surface
-{ background: vars.color.brand.solid, color: vars.color.text.onBrand }
+{ background: vars.color.brand.solid, color: vars.color.brand.onSolid }
 // hover → vars.color.brand.solidHover
 
 // Tinted status banner (e.g. success)

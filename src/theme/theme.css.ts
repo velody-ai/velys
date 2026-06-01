@@ -164,6 +164,7 @@ const lightColor = {
     subtle: "#eefcf9",
     text: "#12a594",
     border: "#12a594",
+    onSolid: "#ffffff",
   },
   text: {
     primary: "#18181b",
@@ -206,11 +207,14 @@ const darkColor = {
     disabled: "#0e1614",
   },
   brand: {
-    solid: "#12a594",
-    solidHover: "#0ac7b4",
+    // Dark mode best practice: lighter, less-saturated accent + dark on-color
+    // (Material 3 tonal). Avoids the vivid-teal "vibration" on dark surfaces.
+    solid: "#61d1c4",
+    solidHover: "#7ddccf",
     subtle: "#04201b",
     text: "#0ac7b4",
     border: "#12a594",
+    onSolid: "#18181b",
   },
   text: {
     primary: "#fafafa",

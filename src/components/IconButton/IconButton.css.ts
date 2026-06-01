@@ -24,7 +24,7 @@ export const iconButton = recipe({
       lg: { width: "48px", height: "48px", fontSize: "24px" },
     },
     variant: {
-      solid: { backgroundColor: vars.color.brand.solid, color: vars.color.text.onBrand, selectors: { "&:not(:disabled):hover": { backgroundColor: vars.color.brand.solidHover } } },
+      solid: { backgroundColor: vars.color.brand.solid, color: vars.color.brand.onSolid, selectors: { "&:not(:disabled):hover": { backgroundColor: vars.color.brand.solidHover } } },
       outline: { backgroundColor: "transparent", borderColor: vars.color.border.default, selectors: { "&:not(:disabled):hover": { backgroundColor: vars.color.bg.hover }, "&:disabled": { backgroundColor: "transparent" } } },
       ghost: { backgroundColor: "transparent", selectors: { "&:not(:disabled):hover": { backgroundColor: vars.color.bg.hover }, "&:disabled": { backgroundColor: "transparent" } } },
     },

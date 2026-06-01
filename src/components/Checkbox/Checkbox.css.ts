@@ -21,7 +21,7 @@ export const boxBase = style({
   border: `1.5px solid ${vars.color.border.strong}`,
   borderRadius: vars.radius.sm,
   backgroundColor: vars.color.bg.default,
-  color: vars.color.text.onBrand,
+  color: vars.color.brand.onSolid,
   transition: "background-color 0.12s, border-color 0.12s, box-shadow 0.12s",
   selectors: {
     [`${input}:checked + &`]: { backgroundColor: vars.color.brand.solid, borderColor: vars.color.brand.solid },
