@@ -42,7 +42,7 @@ export const field = recipe({
         cursor: "not-allowed",
         backgroundColor: vars.color.bg.disabled,
         borderColor: vars.color.border.subtle,
-        color: vars.color.text.disabled,
+        color: vars.color.text.tertiary,
       },
     },
   },
@@ -136,7 +136,7 @@ export const option = recipe({
   variants: {
     active: { true: { backgroundColor: vars.color.bg.hover } },
     selected: { true: { fontWeight: vars.font.weight.medium } },
-    disabled: { true: { color: vars.color.text.disabled, cursor: "not-allowed" } },
+    disabled: { true: { color: vars.color.text.tertiary, cursor: "not-allowed" } },
   },
 });
 

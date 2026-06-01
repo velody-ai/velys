@@ -19,7 +19,7 @@ export const textarea = recipe({
     "::placeholder": { color: vars.color.text.placeholder },
     selectors: {
       "&:focus-visible": { outline: "none", borderColor: vars.color.border.focus, boxShadow: vars.shadow.focus },
-      "&:disabled": { backgroundColor: vars.color.bg.disabled, color: vars.color.text.disabled, borderColor: vars.color.border.subtle, cursor: "not-allowed" },
+      "&:disabled": { backgroundColor: vars.color.bg.disabled, color: vars.color.text.tertiary, borderColor: vars.color.border.subtle, cursor: "not-allowed" },
     },
   },
   variants: {
