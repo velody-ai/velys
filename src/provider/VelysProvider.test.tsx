@@ -10,13 +10,22 @@ import { useDisclosure } from "../hooks/useDisclosure";
 import { renderHook, act } from "@testing-library/react";
 import * as stories from "./VelysProvider.stories";
 
-const { Playground } = composeStories(stories);
+const { Playground, Toasts } = composeStories(stories);
 
 function ToastTrigger() {
-  const { toast, clear } = useToast();
+  const { toast, dismiss, clear } = useToast();
   return (
     <>
       <button onClick={() => toast({ title: "Hi", duration: 0 })}>fire</button>
+      <button
+        onClick={() => {
+          toast({ title: "First", duration: 0, position: "top-left" });
+          toast({ title: "Second", duration: 0, position: "top-left" });
+        }}
+      >
+        stack
+      </button>
+      <button onClick={() => dismiss("toast-1")}>dismiss-first</button>
       <button onClick={clear}>clear</button>
     </>
   );
@@ -53,6 +62,30 @@ describe("VelysProvider — toasts", () => {
     await userEvent.click(screen.getByText("clear"));
     await waitFor(() => expect(screen.queryByText("Hi")).not.toBeInTheDocument());
   });
+
+  it("stacks multiple toasts at the same position", async () => {
+    render(
+      <VelysProvider>
+        <ToastTrigger />
+      </VelysProvider>,
+    );
+    await userEvent.click(screen.getByText("stack"));
+    expect(await screen.findByText("First")).toBeInTheDocument();
+    expect(screen.getByText("Second")).toBeInTheDocument();
+  });
+
+  it("removes a toast after its exit animation when dismissed", async () => {
+    render(
+      <VelysProvider>
+        <ToastTrigger />
+      </VelysProvider>,
+    );
+    await userEvent.click(screen.getByText("stack")); // creates toast-1 (First) + toast-2 (Second)
+    expect(await screen.findByText("First")).toBeInTheDocument();
+    await userEvent.click(screen.getByText("dismiss-first"));
+    await waitFor(() => expect(screen.queryByText("First")).not.toBeInTheDocument());
+    expect(screen.getByText("Second")).toBeInTheDocument();
+  });
 });
 
 describe("useTheme / useToast guards", () => {
@@ -82,8 +115,11 @@ describe("useDisclosure", () => {
 });
 
 describe("Provider stories", () => {
-  it("renders the Playground story", () => {
-    const { container } = render(<Playground />);
+  it.each([
+    ["Playground", Playground],
+    ["Toasts", Toasts],
+  ])("renders the %s story", (_name, Story) => {
+    const { container } = render(<Story />);
     expect(container).not.toBeEmptyDOMElement();
   });
 

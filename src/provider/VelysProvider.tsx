@@ -14,11 +14,14 @@ import {
   ToastContext,
   type ThemeMode,
   type ToastOptions,
+  type ToastPosition,
 } from "./context";
 import * as css from "./toastViewport.css";
 
 interface ActiveToast extends ToastOptions {
   id: string;
+  position: ToastPosition;
+  leaving?: boolean;
 }
 
 export interface VelysProviderProps {
@@ -30,9 +33,16 @@ export interface VelysProviderProps {
   onThemeChange?: (theme: ThemeMode) => void;
   /** Apply the theme class to <html> so portalled content is themed. Default true. */
   applyToDocument?: boolean;
+  /** Default corner for toasts. Per-toast `position` overrides this. Default "bottom-right". */
+  toastPosition?: ToastPosition;
 }
 
 const themeClassFor = (mode: ThemeMode) => (mode === "dark" ? darkThemeClass : lightThemeClass);
+
+const splitPosition = (p: ToastPosition) => {
+  const [y, x] = p.split("-") as ["top" | "bottom", "left" | "center" | "right"];
+  return { y, x };
+};
 
 /**
  * Root provider for Velys apps. Owns theme mode (exposed via `useTheme`) and
@@ -44,6 +54,7 @@ export function VelysProvider({
   defaultTheme = "light",
   onThemeChange,
   applyToDocument = true,
+  toastPosition = "bottom-right",
 }: VelysProviderProps) {
   const [internal, setInternal] = useState<ThemeMode>(defaultTheme);
   const theme = controlled ?? internal;
@@ -74,7 +85,7 @@ export function VelysProvider({
   const counter = useRef(0);
   const timers = useRef(new Map<string, ReturnType<typeof setTimeout>>());
 
-  const dismiss = useCallback((id: string) => {
+  const remove = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
     const timer = timers.current.get(id);
     if (timer) {
@@ -83,11 +94,30 @@ export function VelysProvider({
     }
   }, []);
 
+  // Play the exit animation, then unmount.
+  const dismiss = useCallback(
+    (id: string) => {
+      setToasts((prev) => prev.map((t) => (t.id === id ? { ...t, leaving: true } : t)));
+      const exit = timers.current.get(`${id}:exit`);
+      if (!exit) {
+        timers.current.set(
+          `${id}:exit`,
+          setTimeout(() => {
+            remove(id);
+            timers.current.delete(`${id}:exit`);
+          }, css.EXIT_MS),
+        );
+      }
+    },
+    [remove],
+  );
+
   const toast = useCallback(
     (options: ToastOptions) => {
       counter.current += 1;
       const id = `toast-${counter.current}`;
-      setToasts((prev) => [...prev, { ...options, id }]);
+      const position = options.position ?? toastPosition;
+      setToasts((prev) => [...prev, { ...options, id, position }]);
       const duration = options.duration ?? 5000;
       if (duration > 0) {
         timers.current.set(
@@ -97,7 +127,7 @@ export function VelysProvider({
       }
       return id;
     },
-    [dismiss],
+    [dismiss, toastPosition],
   );
 
   const clear = useCallback(() => {
@@ -117,19 +147,37 @@ export function VelysProvider({
   );
   const toastValue = useMemo(() => ({ toast, dismiss, clear }), [toast, dismiss, clear]);
 
+  // Group toasts by position so each corner renders its own stack.
+  const groups = useMemo(() => {
+    const map = new Map<ToastPosition, ActiveToast[]>();
+    for (const t of toasts) {
+      const arr = map.get(t.position) ?? [];
+      arr.push(t);
+      map.set(t.position, arr);
+    }
+    return [...map.entries()];
+  }, [toasts]);
+
   return (
     <ThemeContext.Provider value={themeValue}>
       <ToastContext.Provider value={toastValue}>
         <div className={themeClassFor(theme)}>{children}</div>
         {typeof document !== "undefined" &&
           createPortal(
-            <div className={css.viewport}>
-              {toasts.map(({ id, ...rest }) => (
-                <div key={id} className={css.item}>
-                  <Toast {...rest} onClose={() => dismiss(id)} />
-                </div>
-              ))}
-            </div>,
+            <>
+              {groups.map(([position, items]) => {
+                const { x, y } = splitPosition(position);
+                return (
+                  <div key={position} className={css.viewport({ x, y })}>
+                    {items.map(({ id, position: _p, leaving, ...rest }) => (
+                      <div key={id} className={css.item({ state: leaving ? "leaving" : "entering" })}>
+                        <Toast {...rest} onClose={() => dismiss(id)} />
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+            </>,
             document.body,
           )}
       </ToastContext.Provider>

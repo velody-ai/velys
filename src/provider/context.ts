@@ -13,6 +13,14 @@ export const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export type ToastStatus = "info" | "success" | "warning" | "danger" | "neutral";
 
+export type ToastPosition =
+  | "top-left"
+  | "top-center"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-center"
+  | "bottom-right";
+
 export interface ToastOptions {
   status?: ToastStatus;
   title?: ReactNode;
@@ -22,6 +30,8 @@ export interface ToastOptions {
   onAction?: () => void;
   /** Auto-dismiss delay in ms. Set to 0 to disable. Defaults to 5000. */
   duration?: number;
+  /** Where this toast appears. Overrides the provider's default position. */
+  position?: ToastPosition;
 }
 
 export interface ToastContextValue {
