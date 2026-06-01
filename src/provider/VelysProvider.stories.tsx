@@ -33,8 +33,10 @@ function DisclosureDemo() {
 }
 
 export const Playground: Story = {
-  render: () => (
-    <VelysProvider>
+  // Follow the Storybook theme toolbar (applyToDocument=false to defer to the
+  // preview decorator's <html> theme class).
+  render: (_args, { globals }) => (
+    <VelysProvider theme={globals.theme === "dark" ? "dark" : "light"} applyToDocument={false}>
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <ThemeDemo />
         <DisclosureDemo />

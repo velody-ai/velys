@@ -100,8 +100,11 @@ function ToastLab() {
 
 export const Imperative: Story = {
   name: "Imperative (position + stacking)",
-  render: () => (
-    <VelysProvider>
+  // Follow the Storybook theme toolbar. applyToDocument=false so the provider
+  // doesn't fight the preview decorator's <html> theme class (which themes the
+  // portalled toasts); the toolbar globals drive the in-canvas theme.
+  render: (_args, { globals }) => (
+    <VelysProvider theme={globals.theme === "dark" ? "dark" : "light"} applyToDocument={false}>
       <ToastLab />
     </VelysProvider>
   ),
