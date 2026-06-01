@@ -6,7 +6,7 @@ import { composeStories } from "@storybook/react";
 import { Toast } from "./Toast";
 import * as stories from "./Toast.stories";
 
-const { Statuses, WithAction } = composeStories(stories);
+const { Statuses, WithAction, Imperative } = composeStories(stories);
 
 describe("Toast", () => {
   it("renders title and description with role='status'", () => {
@@ -50,6 +50,7 @@ describe("Toast stories", () => {
   it.each([
     ["Statuses", Statuses],
     ["WithAction", WithAction],
+    ["Imperative", Imperative],
   ])("renders the %s story", (_name, Story) => {
     const { container } = render(<Story />);
     expect(container).not.toBeEmptyDOMElement();
