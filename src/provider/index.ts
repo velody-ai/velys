@@ -5,5 +5,6 @@ export type {
   ThemeContextValue,
   ToastOptions,
   ToastStatus,
+  ToastPosition,
   ToastContextValue,
 } from "./context";
