@@ -30,7 +30,7 @@ const radius = {
 
 const font = {
   family: {
-    sans: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    sans: '"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif',
     mono: '"Geist Mono", "SFMono-Regular", Menlo, Consolas, monospace',
   },
   size: {
