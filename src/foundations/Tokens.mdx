@@ -138,11 +138,12 @@ In **dark mode** `canvas` (page floor) is darker than `default` (the surface on 
 ### brand — `vars.color.brand.*` (teal accent)
 
 <ColorTable rows={[
-  ["brand.solid", "#12a594", "#12a594", "Primary solid fill"],
-  ["brand.solidHover", "#0d8c7d", "#0ac7b4", "Hover for solid fill"],
+  ["brand.solid", "#12a594", "#61d1c4", "Primary solid fill (dark: lighter/desaturated)"],
+  ["brand.solidHover", "#0d8c7d", "#7ddccf", "Hover for solid fill"],
   ["brand.subtle", "#eefcf9", "#04201b", "Subtle brand background"],
   ["brand.text", "#12a594", "#0ac7b4", "Brand-colored text/links"],
   ["brand.border", "#12a594", "#12a594", "Brand border"],
+  ["brand.onSolid", "#ffffff", "#18181b", "Foreground on a brand/solid fill (dark: dark text)"],
 ]} />
 
 ### border — `vars.color.border.*`
@@ -247,7 +248,7 @@ Light and dark have separate shadow values; reference via `vars.shadow.<name>`.
 selectors: { "&:focus-visible": { borderColor: vars.color.border.focus, boxShadow: vars.shadow.focus } }
 
 // Primary (brand) button surface — hover → vars.color.brand.solidHover
-{ background: vars.color.brand.solid, color: vars.color.text.onBrand }
+{ background: vars.color.brand.solid, color: vars.color.brand.onSolid }
 
 // Tinted status banner (e.g. success)
 { background: vars.color.success.subtle, color: vars.color.success.text, border: `1px solid ${vars.color.success.border}` }

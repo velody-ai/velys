@@ -42,7 +42,7 @@ export const button = recipe({
   },
   compoundVariants: [
     // Primary (brand = teal)
-    { variants: { color: "primary", variant: "solid" }, style: { backgroundColor: vars.color.brand.solid, color: vars.color.text.onBrand, selectors: { "&:not(:disabled):hover": { backgroundColor: vars.color.brand.solidHover } } } },
+    { variants: { color: "primary", variant: "solid" }, style: { backgroundColor: vars.color.brand.solid, color: vars.color.brand.onSolid, selectors: { "&:not(:disabled):hover": { backgroundColor: vars.color.brand.solidHover } } } },
     { variants: { color: "primary", variant: "outline" }, style: { borderColor: vars.color.brand.border, color: vars.color.brand.text, selectors: { "&:not(:disabled):hover": { backgroundColor: vars.color.bg.hover } } } },
     { variants: { color: "primary", variant: "ghost" }, style: { color: vars.color.brand.text, selectors: { "&:not(:disabled):hover": { backgroundColor: vars.color.bg.hover } } } },
     // Secondary (neutral high-contrast)
