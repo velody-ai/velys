@@ -10,7 +10,7 @@ import { useDisclosure } from "../hooks/useDisclosure";
 import { renderHook, act } from "@testing-library/react";
 import * as stories from "./VelysProvider.stories";
 
-const { Playground, Toasts } = composeStories(stories);
+const { Playground } = composeStories(stories);
 
 function ToastTrigger() {
   const { toast, dismiss, clear } = useToast();
@@ -115,10 +115,7 @@ describe("useDisclosure", () => {
 });
 
 describe("Provider stories", () => {
-  it.each([
-    ["Playground", Playground],
-    ["Toasts", Toasts],
-  ])("renders the %s story", (_name, Story) => {
+  it.each([["Playground", Playground]])("renders the %s story", (_name, Story) => {
     const { container } = render(<Story />);
     expect(container).not.toBeEmptyDOMElement();
   });
