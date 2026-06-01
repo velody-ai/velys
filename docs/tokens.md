@@ -163,8 +163,14 @@ boxShadow: `0 1px 2px ${vars.palette.alpha[300]}`,
 | `full` | `9999px` (pills/circles) |
 
 ## Font — `vars.font.*`
-- `family.sans` — `Inter, -apple-system, …, sans-serif`
+- `family.sans` — `"Pretendard Variable", Pretendard, -apple-system, …, "Noto Sans KR", sans-serif`
 - `family.mono` — `"Geist Mono", …, monospace`
+
+> **Loading Pretendard:** the library references Pretendard but does not bundle it — load it in your app so the stack resolves (otherwise it falls back to the system sans). Easiest is the CDN:
+> ```html
+> <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable-dynamic-subset.css" />
+> ```
+> or `npm i pretendard` and `import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css"`.
 
 | `size` | px | | `lineHeight` | px |
 |---|---|---|---|---|
