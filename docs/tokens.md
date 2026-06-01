@@ -120,6 +120,25 @@ Each group exposes `solid`, `subtle`, `text`, `border` (`danger` also has `solid
 
 ---
 
+## Palette (primitives) — `vars.palette.*`
+The raw color scales the semantic tokens are built from. **Mode-invariant** (same value in Light and Dark). Prefer the semantic `color.*` tokens above; reach for the palette only when no semantic token fits.
+
+- Scales (each `100`–`1000`, lightest → darkest): `gray`, `blue`, `red`, `amber`, `green`, `teal`
+- Constants: `white`, `black`
+- `alpha` (`100`–`500`): translucent black overlays — `rgba(0,0,0,0.04 … 0.50)`
+
+```ts
+import { vars } from "@velody/velys";
+// access with a numeric step
+background: vars.palette.teal[700],   // #12a594 (brand accent)
+borderColor: vars.palette.gray[300],
+boxShadow: `0 1px 2px ${vars.palette.alpha[300]}`,
+```
+
+`teal` is the brand accent scale (`teal[700]` = `#12a594`). The `brand` semantic tokens map onto it.
+
+---
+
 ## Spacing — `vars.space.*`
 4px-based scale; used for padding, gap, margins, and fixed sizes.
 

@@ -81,6 +81,46 @@ const motion = {
   },
 } as const;
 
+/**
+ * 원시 색상 팔레트 — Figma `Primitives` 컬렉션과 1:1. 모드 무관(light/dark 동일).
+ * 가능하면 시맨틱 `color.*` 토큰을 쓰고, 마땅한 시맨틱 토큰이 없을 때만 직접 사용한다.
+ */
+const palette = {
+  gray: {
+    100: "#fafafa", 200: "#f4f4f5", 300: "#e4e4e7", 400: "#d4d4d8", 500: "#a1a1aa",
+    600: "#71717a", 700: "#52525b", 800: "#3f3f46", 900: "#27272a", 1000: "#18181b",
+  },
+  blue: {
+    100: "#e5f1ff", 200: "#cce3ff", 300: "#99c7ff", 400: "#66aaff", 500: "#338eff",
+    600: "#0070f3", 700: "#005cc4", 800: "#004695", 900: "#003066", 1000: "#001b3a",
+  },
+  red: {
+    100: "#ffe5e6", 200: "#ffccce", 300: "#ff999d", 400: "#ff666c", 500: "#fa383e",
+    600: "#e5484d", 700: "#c4282d", 800: "#951e22", 900: "#661416", 1000: "#3a0b0c",
+  },
+  amber: {
+    100: "#fff6e5", 200: "#ffeccc", 300: "#ffd999", 400: "#ffc666", 500: "#ffb020",
+    600: "#f5a623", 700: "#c4831c", 800: "#956115", 900: "#66400e", 1000: "#3a2407",
+  },
+  green: {
+    100: "#e6f9ed", 200: "#ccf3db", 300: "#99e7b7", 400: "#66db93", 500: "#3dd68c",
+    600: "#17c964", 700: "#12a150", 800: "#0e7a3c", 900: "#095227", 1000: "#052e16",
+  },
+  teal: {
+    100: "#eefcf9", 200: "#d3f7f0", 300: "#a8efe3", 400: "#6ee3d3", 500: "#2dd4bd",
+    600: "#16bca9", 700: "#12a594", 800: "#0d8c7d", 900: "#075e54", 1000: "#04201b",
+  },
+  white: "#ffffff",
+  black: "#000000",
+  alpha: {
+    100: "rgba(0, 0, 0, 0.04)",
+    200: "rgba(0, 0, 0, 0.08)",
+    300: "rgba(0, 0, 0, 0.12)",
+    400: "rgba(0, 0, 0, 0.30)",
+    500: "rgba(0, 0, 0, 0.50)",
+  },
+} as const;
+
 const shadow = {
   light: {
     sm: "0px 2px 2px #0000000a",
@@ -202,6 +242,7 @@ const darkColor = {
 
 export const [lightThemeClass, vars] = createTheme({
   color: lightColor,
+  palette,
   space,
   radius,
   font,
@@ -211,6 +252,7 @@ export const [lightThemeClass, vars] = createTheme({
 
 export const darkThemeClass = createTheme(vars, {
   color: darkColor,
+  palette,
   space,
   radius,
   font,

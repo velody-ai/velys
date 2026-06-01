@@ -48,6 +48,69 @@ export const Colors: Story = {
   ),
 };
 
+const paletteScales: [string, Record<string, string>][] = [
+  ["gray", vars.palette.gray],
+  ["blue", vars.palette.blue],
+  ["red", vars.palette.red],
+  ["amber", vars.palette.amber],
+  ["green", vars.palette.green],
+  ["teal", vars.palette.teal],
+];
+
+const chip: React.CSSProperties = {
+  width: 72,
+  height: 48,
+  borderRadius: vars.radius.md,
+  border: `1px solid ${vars.color.border.subtle}`,
+};
+const chipLabel: React.CSSProperties = {
+  fontSize: vars.font.size.xs,
+  fontFamily: vars.font.family.mono,
+  color: vars.color.text.secondary,
+};
+
+export const Primitives: Story = {
+  render: () => (
+    <div>
+      <p style={sub}>
+        Raw palette — mode-invariant (same in Light/Dark). Access via <code>vars.palette.gray[500]</code>.
+        Prefer semantic <code>color.*</code> tokens; reach for these only when no semantic token fits.
+      </p>
+      {paletteScales.map(([name, scale]) => (
+        <div key={name}>
+          <h3 style={heading}>palette.{name}</h3>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {Object.entries(scale).map(([step, v]) => (
+              <div key={step} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <div style={{ ...chip, background: v }} />
+                <span style={chipLabel}>{step}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+      <h3 style={heading}>palette.white / palette.black</h3>
+      <div style={{ display: "flex", gap: 8 }}>
+        {([["white", vars.palette.white], ["black", vars.palette.black]] as const).map(([k, v]) => (
+          <div key={k} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <div style={{ ...chip, background: v }} />
+            <span style={chipLabel}>{k}</span>
+          </div>
+        ))}
+      </div>
+      <h3 style={heading}>palette.alpha (over white)</h3>
+      <div style={{ display: "flex", gap: 8, background: "#fff", padding: 12, borderRadius: vars.radius.md, width: "fit-content" }}>
+        {Object.entries(vars.palette.alpha).map(([step, v]) => (
+          <div key={step} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <div style={{ ...chip, background: v }} />
+            <span style={chipLabel}>{step}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  ),
+};
+
 export const Spacing: Story = {
   render: () => (
     <div>
