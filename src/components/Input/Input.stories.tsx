@@ -26,7 +26,8 @@ export const States: Story = {
     <div style={{ display: "flex", flexDirection: "column", gap: 12, width: 280 }}>
       <Input placeholder="Default" />
       <Input placeholder="Invalid" invalid defaultValue="wrong@" />
-      <Input placeholder="Disabled" disabled />
+      <Input placeholder="Disabled (empty)" disabled />
+      <Input disabled defaultValue="Disabled value" />
     </div>
   ),
 };

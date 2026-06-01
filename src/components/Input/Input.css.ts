@@ -38,7 +38,7 @@ export const inputRoot = recipe({
     disabled: {
       true: {
         backgroundColor: vars.color.bg.disabled,
-        color: vars.color.text.disabled,
+        color: vars.color.text.tertiary,
         borderColor: vars.color.border.subtle,
         cursor: "not-allowed",
       },
