@@ -16,13 +16,16 @@ export const button = recipe({
     transition: "background-color 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s",
     selectors: {
       "&:focus-visible": { outline: "none", boxShadow: vars.shadow.focus },
-      "&:disabled": {
+      // Disabled greying does NOT apply while loading — a loading button keeps
+      // its color (brand/secondary/…) and just shows the spinner.
+      '&:disabled:not([data-loading="true"])': {
         cursor: "not-allowed",
         backgroundColor: vars.color.bg.disabled,
         borderColor: "transparent",
         color: vars.color.text.disabled,
         opacity: 1,
       },
+      '&[data-loading="true"]': { cursor: "progress" },
     },
   },
   variants: {

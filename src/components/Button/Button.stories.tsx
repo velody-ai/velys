@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "./Button";
 
@@ -43,18 +44,49 @@ export const Sizes: Story = {
 
 export const Disabled: Story = { args: { disabled: true } };
 
+// The `loading` prop renders a Spinner (tone="current", so it inherits the
+// button's label color) and disables the button. It reads correctly on every
+// color × variant — including brand (primary) and secondary solid fills.
 export const Loading: Story = {
-  render: (args) => (
-    <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-      <Button {...args} loading>
-        Saving
-      </Button>
-      <Button {...args} loading variant="outline">
-        Saving
-      </Button>
-      <Button {...args} loading variant="ghost">
-        Saving
-      </Button>
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      {(["primary", "secondary", "destructive"] as const).map((c) => (
+        <div key={c} style={{ display: "flex", gap: 12, alignItems: "center" }}>
+          <Button color={c} loading>
+            Saving
+          </Button>
+          <Button color={c} variant="outline" loading>
+            Saving
+          </Button>
+          <Button color={c} variant="ghost" loading>
+            Saving
+          </Button>
+        </div>
+      ))}
     </div>
   ),
+};
+
+// Interactive: click to enter the loading state, auto-resets after ~1.6s.
+export const LoadingInteractive: Story = {
+  render: () => {
+    function Demo({ color }: { color: "primary" | "secondary" }) {
+      const [loading, setLoading] = useState(false);
+      const run = () => {
+        setLoading(true);
+        setTimeout(() => setLoading(false), 1600);
+      };
+      return (
+        <Button color={color} loading={loading} onClick={run}>
+          {loading ? "Saving…" : "Save changes"}
+        </Button>
+      );
+    }
+    return (
+      <div style={{ display: "flex", gap: 12 }}>
+        <Demo color="primary" />
+        <Demo color="secondary" />
+      </div>
+    );
+  },
 };
