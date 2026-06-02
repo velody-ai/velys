@@ -11,7 +11,6 @@ export const spinner = recipe({
     display: "inline-block",
     borderRadius: vars.radius.full,
     borderStyle: "solid",
-    borderColor: vars.color.border.default,
     animationName: spin,
     animationDuration: "0.6s",
     animationTimingFunction: "linear",
@@ -23,10 +22,22 @@ export const spinner = recipe({
       md: { width: "20px", height: "20px", borderWidth: "2px" },
       lg: { width: "28px", height: "28px", borderWidth: "3px" },
     },
+    // The full ring is a faint (25%) version of the arc color, the arc (top) is
+    // solid. Deriving the track from the arc color keeps the spinner legible on
+    // any surface — including dark mode — instead of a fixed grey track.
     tone: {
-      current: { borderTopColor: "currentColor" },
-      brand: { borderTopColor: vars.color.brand.solid },
-      muted: { borderTopColor: vars.color.text.tertiary },
+      current: {
+        borderColor: "color-mix(in srgb, currentColor 25%, transparent)",
+        borderTopColor: "currentColor",
+      },
+      brand: {
+        borderColor: `color-mix(in srgb, ${vars.color.brand.solid} 25%, transparent)`,
+        borderTopColor: vars.color.brand.solid,
+      },
+      muted: {
+        borderColor: `color-mix(in srgb, ${vars.color.text.tertiary} 25%, transparent)`,
+        borderTopColor: vars.color.text.tertiary,
+      },
     },
   },
   defaultVariants: {

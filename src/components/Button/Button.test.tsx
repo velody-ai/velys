@@ -7,7 +7,7 @@ import { Button } from "./Button";
 import * as stories from "./Button.stories";
 
 // Reuse the Storybook stories as test fixtures (theme decorator + args applied).
-const { Playground, Colors, Sizes, Disabled, Loading } = composeStories(stories);
+const { Playground, Colors, Sizes, Disabled, Loading, LoadingInteractive } = composeStories(stories);
 
 describe("Button", () => {
   it("renders its children inside a button element", () => {
@@ -78,6 +78,7 @@ describe("Button stories", () => {
     ["Sizes", Sizes],
     ["Disabled", Disabled],
     ["Loading", Loading],
+    ["LoadingInteractive", LoadingInteractive],
   ])("renders the %s story", (_name, Story) => {
     const { container } = render(<Story />);
     expect(container).not.toBeEmptyDOMElement();
