@@ -11,6 +11,7 @@ import { Alert } from "@velody/velys";
 |---|---|---|---|
 | `status` | `"info" \| "success" \| "warning" \| "danger" \| "neutral"` | `"info"` | Status |
 | `variant` | `"subtle" \| "solid" \| "outline"` | `"subtle"` | Fill style |
+| `fullWidth` | `boolean` | `false` | Force `width: 100%` (fills parent even in flex/grid/inline contexts) |
 | `title` | `ReactNode` | — | Title |
 | `description` | `ReactNode` | — | Body |
 | `icon` | `ReactNode` | Default status icon | Custom icon |

@@ -25,6 +25,7 @@ export const alert = recipe({
   variants: {
     status: { info: {}, success: {}, warning: {}, danger: {}, neutral: {} },
     variant: { subtle: {}, solid: {}, outline: { backgroundColor: vars.color.bg.default } },
+    fullWidth: { true: { width: "100%" } },
   },
   compoundVariants: (Object.keys(map) as Array<keyof typeof map>).flatMap((s) => [
     { variants: { status: s, variant: "subtle" as const }, style: { backgroundColor: map[s].subtle, borderColor: map[s].border, color: map[s].text } },
