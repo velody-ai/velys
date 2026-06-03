@@ -6,7 +6,7 @@ import { composeStories } from "@storybook/react";
 import { Alert } from "./Alert";
 import * as stories from "./Alert.stories";
 
-const { Subtle, Solid, Dismissible } = composeStories(stories);
+const { Subtle, Solid, Dismissible, FullWidth } = composeStories(stories);
 
 describe("Alert", () => {
   it("renders with role='alert'", () => {
@@ -53,6 +53,14 @@ describe("Alert", () => {
     render(<Alert title="Styled" className="my-class" />);
     expect(screen.getByRole("alert")).toHaveClass("my-class");
   });
+
+  it("applies an extra recipe class when fullWidth", () => {
+    const { rerender } = render(<Alert title="x" data-testid="a" />);
+    const normal = screen.getByTestId("a").className;
+    rerender(<Alert title="x" fullWidth data-testid="a" />);
+    const full = screen.getByTestId("a").className;
+    expect(full).not.toEqual(normal);
+  });
 });
 
 describe("Alert stories", () => {
@@ -60,6 +68,7 @@ describe("Alert stories", () => {
     ["Subtle", Subtle],
     ["Solid", Solid],
     ["Dismissible", Dismissible],
+    ["FullWidth", FullWidth],
   ])("renders the %s story", (_name, Story) => {
     const { container } = render(<Story />);
     expect(container).not.toBeEmptyDOMElement();

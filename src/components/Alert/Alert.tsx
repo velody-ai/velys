@@ -24,12 +24,12 @@ export interface AlertProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"
 }
 
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  { status = "info", variant, title, description, icon, action, onClose, className, children, ...rest },
+  { status = "info", variant, fullWidth, title, description, icon, action, onClose, className, children, ...rest },
   ref,
 ) {
   const Icon = statusIcon[status ?? "info"];
   return (
-    <div ref={ref} role="alert" className={cx(css.alert({ status, variant }), className)} {...rest}>
+    <div ref={ref} role="alert" className={cx(css.alert({ status, variant, fullWidth }), className)} {...rest}>
       <span className={css.icon}>{icon ?? <Icon />}</span>
       <div className={css.content}>
         {title && <div className={css.title}>{title}</div>}
