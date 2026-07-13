@@ -16,20 +16,21 @@ npm i @velody/velys react react-dom   # react / react-dom are peer deps (>=18)
    ```tsx
    import "@velody/velys/styles.css";
    ```
-2. **Apply a theme class** to a container so the CSS variables resolve. Components read only from tokens; the theme class supplies the values.
+2. **Apply a theme class** to a container so the CSS variables resolve. Components read only from tokens; the theme class supplies the values. The easiest way is `VelysProvider` (see Providers & Hooks below), which applies the theme class to `<html>` and hosts the toast system:
    ```tsx
    import "@velody/velys/styles.css";
-   import { lightThemeClass, darkThemeClass, Button } from "@velody/velys";
+   import { VelysProvider, Button } from "@velody/velys";
 
    export default function App() {
      return (
-       <div className={lightThemeClass}>
+       <VelysProvider defaultTheme="light">
          <Button>Get started</Button>
-       </div>
+       </VelysProvider>
      );
    }
    ```
-3. **Dark mode**: swap `lightThemeClass` ↔ `darkThemeClass`. Because portal components (`Modal`, `Toast`, `Tooltip`, `DropdownMenu`) may render to `document.body`, apply the theme class on `<html>` or `<body>` (not only a nested app div) so portalled content is themed too.
+   Or apply `lightThemeClass` / `darkThemeClass` manually to a container.
+3. **Dark mode**: `useTheme().setTheme("dark")` under the provider, or swap `lightThemeClass` ↔ `darkThemeClass` manually. Because portal components (`Modal`, `Drawer`, `Popover`, `Combobox`, `CommandMenu`, `DatePicker`, and the toast viewport) render to `document.body`, apply the theme class on `<html>` or `<body>` (not only a nested app div) so portalled content is themed too — `VelysProvider` does this for you.
 
 ## Design tokens (`vars`)
 
@@ -59,93 +60,94 @@ const style = { color: vars.color.text.primary, padding: vars.space.md };
 Import any of these from `@velody/velys`.
 
 ### Button
-`color`: `"primary"` (default) `| "secondary" | "destructive"` · `variant`: `"solid"` (default) `| "outline" | "ghost"` · `size`: `"mini" | "small" | "medium"` (default) `| "large"` · `fullWidth?` · `leadingIcon?`/`trailingIcon?: ReactNode` · plus `<button>` attrs.
+`color`: `"primary"` (default) `| "secondary" | "destructive"` · `variant`: `"solid"` (default) `| "outline" | "ghost"` · `size`: `"mini" | "small" | "medium"` (default) `| "large"` · `fullWidth?` · `leadingIcon?`/`trailingIcon?: ReactNode` · plus `<button>` attrs (`type` defaults to `"button"`).
 ```tsx
 <Button color="primary" leadingIcon={<PlusIcon />}>Create</Button>
 <Button variant="outline" color="destructive">Delete</Button>
 ```
 
 ### IconButton
-`icon: ReactNode` (required) · `aria-label: string` (**required**) · `variant`: `"solid" | "outline" | "ghost"` · `size`: `"sm" | "md" | "lg"` · `round?`.
+`icon: ReactNode` (required) · `aria-label: string` (**required**) · `variant`: `"ghost"` (default) `| "solid" | "outline"` · `size`: `"sm" | "md"` (default) `| "lg"` (32/40/48 square) · `round?` · plus `<button>` attrs.
 ```tsx
-<IconButton aria-label="Settings" icon={<GearIcon />} variant="ghost" />
+<IconButton aria-label="Settings" icon={<GearIcon />} variant="outline" />
 ```
 
 ### Badge
-`color`: `"neutral" | "brand" | "success" | "warning" | "danger" | "info"` · `variant`: `"solid" | "subtle"` · `size`: `"sm" | "md"` · `withDot?` · `icon?`.
+`color`: `"neutral"` (default) `| "brand" | "success" | "warning" | "danger" | "info"` · `variant`: `"subtle"` (default) `| "solid"` · `size`: `"sm" | "md"` (default) · `withDot?` · `icon?` · plus `<span>` attrs.
 ```tsx
-<Badge color="success" variant="subtle" withDot>Active</Badge>
+<Badge color="success" withDot>Active</Badge>
 ```
 
 ### Input
-`size`: `"sm" | "md" | "lg"` · `invalid?` · `leadingIcon?`/`trailingIcon?` · plus `<input>` attrs.
+`size`: `"sm" | "md"` (default) `| "lg"` · `invalid?` · `leadingIcon?`/`trailingIcon?` · `rootClassName?` (container; `className` targets the `<input>`) · plus `<input>` attrs.
 ```tsx
 <Input placeholder="Email" leadingIcon={<MailIcon />} invalid={hasError} />
 ```
 
 ### Textarea
-`size`: `"sm" | "md" | "lg"` · `invalid?` · plus `<textarea>` attrs.
+`size`: `"sm" | "md"` (default) `| "lg"` (min-height 72/96/128) · `invalid?` · plus `<textarea>` attrs.
 
 ### Select  (hybrid)
-`size`: `"sm" | "md" | "lg"` · `invalid?` · `placeholder?` · `<option>` children · plus `<select>` attrs (`value`/`defaultValue`/`onChange`/`name`/`disabled`).
+`size`: `"sm" | "md"` (default) `| "lg"` · `invalid?` · `placeholder?` · `<option>` children · plus `<select>` attrs (`value`/`defaultValue`/`onChange`/`name`/`disabled`).
 Renders a custom accessible listbox on desktop (pointer: fine) and the native `<select>` on touch/coarse pointers. `onChange` and form submission behave like a native `<select>` in both modes.
 ```tsx
 <Select defaultValue="2" onChange={(e) => setVal(e.target.value)}>
   <option value="">Select an option</option>
   <option value="1">Option one</option>
   <option value="2">Option two</option>
-  <option value="3" disabled>Option three</option>
 </Select>
 ```
 
 ### Checkbox
-`size`: `"sm" | "md"` · `indeterminate?` · `label?` · `description?` · plus `<input type=checkbox>` attrs (`checked`, `onChange`).
+`size`: `"sm" | "md"` (default) · `indeterminate?` · `invalid?` · `label?` · `description?` · plus `<input type=checkbox>` attrs (`checked`, `onChange`).
 ```tsx
 <Checkbox label="Accept terms" description="Required to continue" />
 ```
 
 ### Radio / RadioGroup
-`Radio`: `size`: `"sm" | "md"` · `label?` · `description?` + `<input type=radio>` attrs.
-`RadioGroup`: `orientation`: `"vertical" | "horizontal"` · `name` · `<fieldset>` attrs.
+`Radio`: `size`: `"sm" | "md"` (default) · `label?` · `description?` + `<input type=radio>` attrs (`name`, `value`, `checked`).
+`RadioGroup`: `orientation`: `"vertical"` (default) `| "horizontal"` · renders a `<fieldset>` + its attrs.
 ```tsx
-<RadioGroup name="plan" orientation="vertical">
-  <Radio value="free" label="Free" />
-  <Radio value="pro" label="Pro" />
+<RadioGroup>
+  <Radio name="plan" value="free" label="Free" defaultChecked />
+  <Radio name="plan" value="pro" label="Pro" description="$20/mo" />
 </RadioGroup>
 ```
 
 ### Switch
-`size`: `"sm" | "md"` · `label?` · plus `<input type=checkbox>` attrs.
+`size`: `"sm" | "md"` (default) · `label?` · plus `<input type=checkbox role=switch>` attrs (`checked`, `onChange`).
 
 ### Card  (+ CardTitle, CardDescription)
-`variant`: `"elevated" | "outlined" | "filled"` · `padding`: `"sm" | "md" | "lg"`.
+`variant`: `"elevated" | "outlined"` (default) `| "filled"` · `padding`: `"sm" | "md"` (default) `| "lg"`. `CardTitle` renders `<h3>`, `CardDescription` renders `<p>`.
 ```tsx
-<Card variant="outlined" padding="md">
+<Card variant="elevated" padding="lg">
   <CardTitle>Title</CardTitle>
   <CardDescription>Supporting text</CardDescription>
 </Card>
 ```
 
+### Avatar
+`size`: `"xs" | "sm" | "md"` (default) `| "lg" | "xl"` (20/24/32/40/48) · `shape`: `"circle"` (default) `| "square"` · `src?` (image, with `alt?`) · `initials?` · `icon?` (fallbacks in that priority, then a default person glyph).
+```tsx
+<Avatar src="/me.jpg" alt="Jane" size="md" />
+<Avatar initials="MK" shape="square" />
+```
+
 ### Alert
-`status`: `"info" | "success" | "warning" | "danger" | "neutral"` · `variant`: `"subtle" | "solid" | "outline"` · `title?` · `description?` · `icon?` · `action?` · `onClose?` (shows dismiss button).
+`status`: `"info"` (default) `| "success" | "warning" | "danger" | "neutral"` · `variant`: `"subtle"` (default) `| "solid" | "outline"` · `fullWidth?` (force `width: 100%`) · `title?` · `description?` · `icon?` (custom, replaces the status default) · `action?` · `onClose?` (shows dismiss button). `role="alert"` by default.
 ```tsx
 <Alert status="warning" title="Heads up" description="Check your settings." onClose={dismiss} />
 ```
 
 ### Toast
-`status`: `"info" | "success" | "warning" | "danger" | "neutral"` · `title?` · `description?` · `icon?` · `actionLabel?` · `onClose?`.
+`status`: `"info"` (default) `| "success" | "warning" | "danger" | "neutral"` · `title?` · `description?` · `icon?` · `actionLabel?` · `onAction?` · `onClose?`. Presentational (`role="status"`); for imperative stacked toasts use `useToast()` under `VelysProvider` (see Providers & Hooks).
 
-### Modal
-`open: boolean` · `onClose: () => void` (both required) · `size`: `"sm" | "md" | "lg"` · `title?` · `footer?` · `showClose?` (default true) · `closeOnOverlay?` (default true) · `children`.
-```tsx
-<Modal open={open} onClose={() => setOpen(false)} title="Confirm" footer={<Button onClick={save}>Save</Button>}>
-  Are you sure?
-</Modal>
-```
+### EmptyState
+`size`: `"sm" | "md"` (default) `| "lg"` · `icon?` · `title?` · `description?` · `actions?`.
 
 ### Tabs  (+ TabList, Tab, TabPanel)
-`Tabs`: `value?`/`defaultValue?` · `onValueChange?: (value: string) => void` · `variant`: `"underline" | "pill"` · `size`: `"sm" | "md"`.
-`Tab` and `TabPanel` are matched by their `value` prop.
+`Tabs`: `value?`/`defaultValue?` · `onValueChange?: (value: string) => void` · `variant`: `"underline"` (default) `| "pill"` · `size`: `"sm" | "md"` (default).
+`Tab` and `TabPanel` are matched by their `value` prop; `Tab` takes `<button>` attrs (e.g. `disabled`).
 ```tsx
 <Tabs defaultValue="a" variant="pill">
   <TabList>
@@ -158,24 +160,14 @@ Renders a custom accessible listbox on desktop (pointer: fine) and the native `<
 ```
 
 ### Tooltip
-`content: ReactNode` (required) · `side`: `"top"` (default) `| "bottom" | "left" | "right"` · `open?` (controlled) · wraps a single `children` trigger.
+`content: ReactNode` (required) · `side`: `"top"` (default) `| "bottom" | "left" | "right"` · `open?` (force display) · wraps a single `children` trigger element. Positioned CSS-absolute relative to the trigger (no portal) — avoid clipping `overflow` containers.
 ```tsx
 <Tooltip content="Copy to clipboard"><IconButton aria-label="Copy" icon={<CopyIcon />} /></Tooltip>
 ```
 
-### Avatar
-`size`: `"xs" | "sm" | "md" | "lg" | "xl"` · `shape`: `"circle" | "square"` · `src?` (image) · `initials?` · `icon?` (fallbacks in that priority).
-```tsx
-<Avatar src="/me.jpg" size="md" />
-<Avatar initials="MK" shape="square" />
-```
-
-### EmptyState
-`size`: `"sm" | "md" | "lg"` · `icon?` · `title?` · `description?` · `actions?`.
-
-### DropdownMenu  (+ MenuItem, MenuSeparator, MenuLabel)
-`DropdownMenu`: `trigger: ReactNode` (click is wired automatically) · `children`.
-`MenuItem`: `tone`: `"default" | "danger"` · `leadingIcon?` · `hint?` (right-aligned shortcut) · `disabled?` · `onClick`.
+### DropdownMenu  (+ MenuItem, MenuSeparator, MenuLabel, Menu)
+`DropdownMenu`: `trigger: ReactNode` (click is wired automatically; closes on outside click/Escape) · `children`.
+`MenuItem`: `tone`: `"default" | "danger"` · `leadingIcon?` · `hint?` (right-aligned shortcut) · `disabled?` · `onClick`. `Menu`/`MenuItem`/`MenuSeparator`/`MenuLabel` can also be used standalone.
 ```tsx
 <DropdownMenu trigger={<Button variant="outline">Actions</Button>}>
   <MenuLabel>Account</MenuLabel>
@@ -184,8 +176,16 @@ Renders a custom accessible listbox on desktop (pointer: fine) and the native `<
 </DropdownMenu>
 ```
 
+### Modal
+`open: boolean` · `onClose: () => void` (both required) · `size`: `"sm" | "md"` (default) `| "lg"` (max width 400/512/640) · `title?` · `footer?` · `showClose?` (default true) · `closeOnOverlay?` (default true) · `children`. Portals to `document.body`; closes on Escape/overlay click.
+```tsx
+<Modal open={open} onClose={() => setOpen(false)} title="Confirm" footer={<Button onClick={save}>Save</Button>}>
+  Are you sure?
+</Modal>
+```
+
 ### Label  (+ Field)
-`Label`: `size`: `"sm" | "md" | "lg"` · `error?` · `required?` (red asterisk) · `disabled?` · `htmlFor` + `<label>` attrs.
+`Label`: `size`: `"sm" | "md"` (default) `| "lg"` · `error?` · `required?` (red asterisk) · `disabled?` · `htmlFor` + `<label>` attrs.
 `Field`: `invalid?` · `disabled?` + `<div>` attrs — wraps a label + control; the nested Label turns brand-colored on `:focus-within` and red when `invalid`.
 ```tsx
 <Field invalid={hasError}>
@@ -194,4 +194,236 @@ Renders a custom accessible listbox on desktop (pointer: fine) and the native `<
 </Field>
 ```
 
-> Icons are consumer-provided `ReactNode`s (any SVG/icon component). Velys does not require a specific icon library.
+### Text  (+ Code, Kbd)
+`Text`: `as?: ElementType` (default `"p"`) · `size`: `"xs" | "sm" | "md"` (default) `| "lg" | "xl"` · `weight`: `"regular"` (default) `| "medium" | "semibold" | "bold"` · `tone`: `"primary"` (default) `| "secondary" | "tertiary" | "brand" | "success" | "warning" | "danger" | "inherit"` · `align?` · `truncate?`.
+`Code` and `Kbd` render `<code>` / `<kbd>` with native attrs.
+```tsx
+<Text size="sm" tone="secondary">Press <Kbd>⌘</Kbd><Kbd>K</Kbd> or run <Code>velys build</Code>.</Text>
+```
+
+### Heading
+`level`: `1` (default) `| 2 | 3 | 4` (semantic element) · `size`: `"display" | "h1" | "h2" | "h3" | "h4"` (defaults to match `level`) · `truncate?`.
+```tsx
+<Heading level={3} size="h1">h3 element, h1 visual size</Heading>
+```
+
+### Spinner
+`size`: `"sm" | "md"` (default) `| "lg"` (16/20/28) · `tone`: `"current" | "brand"` (default) `| "muted"` · `label?` (screen-reader, default `"Loading"`). `role="status"`.
+
+### Progress  (+ CircularProgress)
+`value?: number` (omit for indeterminate) · `max?` (default 100) · `size`: `"sm" | "md"` (default) · `tone`: `"brand"` (default) `| "success" | "warning" | "danger"` · `label?` (accessible, default `"Loading"`). `CircularProgress` shares the same props with `size`: `"sm" | "md" | "lg"`.
+```tsx
+<Progress value={60} />
+<CircularProgress />   {/* indeterminate */}
+```
+
+### Skeleton
+`variant`: `"text" | "rectangular"` (default) `| "circular"` · `width?`/`height?: number | string` · `lines?` (multi-line text variant). `aria-hidden` by default.
+```tsx
+<Skeleton variant="text" lines={3} />
+```
+
+### Popover  (+ PopoverTrigger, PopoverContent)
+`Popover` (root): `open?` · `defaultOpen?` · `onOpenChange?`.
+`PopoverTrigger`: single focusable child (click toggle + ARIA cloned on).
+`PopoverContent`: `side`: `"top" | "bottom"` (default) `| "left" | "right"` · `align`: `"start" | "center"` (default) `| "end"` · `offset?` (default 8). Portals; closes on Escape/outside click.
+```tsx
+<Popover>
+  <PopoverTrigger><Button>Open</Button></PopoverTrigger>
+  <PopoverContent side="bottom" align="start">Panel content</PopoverContent>
+</Popover>
+```
+
+### Drawer
+`open: boolean` · `onClose: () => void` (both required) · `side`: `"left" | "right"` (default) `| "top" | "bottom"` · `size`: `"sm" | "md"` (default) `| "lg"` · `title?` · `footer?` · `showClose?` (default true) · `closeOnOverlay?` (default true). Portal-based edge sheet; closes on Escape/overlay click.
+
+### Accordion  (+ AccordionItem, AccordionTrigger, AccordionContent)
+`Accordion`: `type`: `"single"` (default) `| "multiple"` · `collapsible?` (default true, single mode) · `value?`/`defaultValue?: string | string[]` · `onValueChange?: (value: string[]) => void` · `variant`: `"bordered"` (default) `| "separated"` · `headingLevel?` (default 3).
+`AccordionItem`: `value` (required). `AccordionTrigger`: `disabled?`.
+```tsx
+<Accordion type="single" defaultValue="a">
+  <AccordionItem value="a">
+    <AccordionTrigger>Question</AccordionTrigger>
+    <AccordionContent>Answer</AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+### Separator
+`orientation`: `"horizontal"` (default) `| "vertical"` · `spacing`: `"none"` (default) `| "sm" | "md" | "lg"` · `decorative?` (default true; `false` exposes `role="separator"`).
+
+### Breadcrumb  (+ BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator)
+`Breadcrumb` = `<nav aria-label="Breadcrumb">`; `BreadcrumbList` = `<ol>`; `BreadcrumbItem` = `<li>`; `BreadcrumbLink` = `<a>` (`href`, …); `BreadcrumbPage` = `<span aria-current="page">`; `BreadcrumbSeparator` defaults to a chevron (override via children). All take native attrs.
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem><BreadcrumbLink href="/">Home</BreadcrumbLink></BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem><BreadcrumbPage>Details</BreadcrumbPage></BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+### Pagination
+`page: number` (1-based) · `count: number` (both required) · `onPageChange?: (page: number) => void` · `siblingCount?` (default 1) · `boundaryCount?` (default 1) · `showPrevNext?` (default true) · `size`: `"sm" | "md"` (default). Also exports `getPaginationRange` for custom rendering.
+```tsx
+<Pagination page={page} count={20} onPageChange={setPage} />
+```
+
+### Slider
+`value?`/`defaultValue?: number` (default 0) · `min?` (0) · `max?` (100) · `step?` (1) · `onChange?: (value: number) => void` · `onChangeEnd?` · `disabled?` · `size`: `"sm" | "md"` (default) · `aria-label` for the thumb. Keyboard: arrows ±step, PageUp/Down ±10×step, Home/End.
+```tsx
+<Slider value={value} onChange={setValue} aria-label="Volume" />
+```
+
+### Table  (+ TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell, TableCaption)
+`Table`: `size?: "sm" | "md"` (default, propagated to heads/cells) + native table attrs; wrapped in a horizontally scrollable container.
+`TableRow`: `interactive?` (hover highlight) · `striped?` (zebra). `TableHead` = `<th scope="col">`, `TableCell` = `<td>`, `TableCaption` = `<caption>`.
+```tsx
+<Table>
+  <TableHeader><TableRow><TableHead>Name</TableHead></TableRow></TableHeader>
+  <TableBody><TableRow interactive><TableCell>Inter</TableCell></TableRow></TableBody>
+</Table>
+```
+
+### Link
+`tone`: `"brand"` (default) `| "neutral" | "inherit"` · `underline`: `"hover"` (default) `| "always" | "none"` · `external?` (sets `target="_blank" rel="noopener noreferrer"`, trailing icon + SR-only "(opens in new tab)") · plus `<a>` attrs.
+```tsx
+<Link href="https://vercel.com/geist" external>Geist design system</Link>
+```
+
+### Stack
+`direction`: `"row" | "column"` (default) · `gap`: `"none"` (default) `| "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl"` (space tokens) · `align`: `"start" | "center" | "end" | "stretch"` (default) `| "baseline"` · `justify`: `"start"` (default) `| "center" | "end" | "between" | "around"` · `wrap?`.
+```tsx
+<Stack direction="row" gap="sm" align="center" justify="between">…</Stack>
+```
+
+### StatusDot
+`status`: `"neutral"` (default) `| "brand" | "success" | "warning" | "danger" | "info"` · `size`: `"sm" | "md"` (default) · `label?` (text after the dot) · `pulse?`. The dot is `aria-hidden`; without a `label`, pass `aria-label` on the root.
+```tsx
+<StatusDot status="success" label="Operational" />
+```
+
+### Tag
+`color`: `"neutral"` (default) `| "brand" | "success" | "warning" | "danger" | "info"` · `variant`: `"subtle"` (default) `| "outline"` · `size`: `"sm" | "md"` (default) · `icon?` · `onDismiss?` (renders a close button) · `dismissLabel?` (default `"Remove"` — interpolate the tag name in lists) · `disabled?`.
+```tsx
+<Tag onDismiss={() => remove("React")} dismissLabel="Remove React">React</Tag>
+```
+
+### Toggle  (+ ToggleGroup, ToggleGroupItem)
+`Toggle`: `pressed?` · `defaultPressed?` · `onPressedChange?: (pressed: boolean) => void` · `size`: `"small" | "medium"` (default) `| "large"` · plus `<button>` attrs (always `type="button"`; `aria-pressed` managed).
+`ToggleGroup`: `type`: `"single"` (default) `| "multiple"` · `value?`/`defaultValue?: string | string[]` · `onValueChange?: (value: string[]) => void` (always an array) · `allowEmpty?` (default true, single mode) · `size?` (cascades) · `disabled?` · `role="group"` — pass `aria-label`.
+`ToggleGroupItem`: `value: string` (required) + `<button>` attrs.
+```tsx
+<ToggleGroup aria-label="Alignment" defaultValue="left" onValueChange={(v) => setAlign(v[0])}>
+  <ToggleGroupItem value="left">Left</ToggleGroupItem>
+  <ToggleGroupItem value="center">Center</ToggleGroupItem>
+</ToggleGroup>
+```
+
+### CopyButton
+`value: string` (required — text written to the clipboard) · `timeout?` (default 2000 ms) · `size`: `"sm" | "md"` (default) · `onCopied?: (value: string) => void` · `aria-label?` (default `"Copy"`; becomes "Copied" while active) · plus `<button>` attrs. Needs a secure context (`navigator.clipboard`).
+```tsx
+<CopyButton value={apiKey} size="sm" aria-label="Copy API key" />
+```
+
+### Snippet
+`text: string | string[]` (required; array = one line each, copied joined with `"\n"`) · `prompt?` (default true — decorative `$ ` marker, never copied) · `copyable?` (default true) · `onCopied?` · `size`: `"sm" | "md"` (default).
+```tsx
+<Snippet text={["git clone …", "cd velys", "npm install"]} />
+```
+
+### Collapsible  (+ CollapsibleTrigger, CollapsibleContent)
+`Collapsible`: `open?` · `defaultOpen?` · `onOpenChange?: (open: boolean) => void` · `disabled?`.
+Trigger is intentionally unstyled (bring your own design); all parts carry `data-state="open" | "closed"` for styling. Content stays mounted while closed; height animates.
+```tsx
+<Collapsible defaultOpen>
+  <CollapsibleTrigger>Show details</CollapsibleTrigger>
+  <CollapsibleContent>Hidden until expanded.</CollapsibleContent>
+</Collapsible>
+```
+
+### NumberInput
+`value?`/`defaultValue?: number | null` (`null` = empty) · `onValueChange?: (value: number | null) => void` · `min?`/`max?` · `step?` (default 1) · `size`: `"sm" | "md"` (default) `| "lg"` · `invalid?` · `rootClassName?` · plus `<input>` attrs (`type`/`value`/`onChange`/`min`/`max`/`step` are managed). APG spinbutton: free text while editing, parsed + clamped + snapped to the step grid on blur/Enter; ArrowUp/Down ±step, PageUp/Down ±10×step, Home/End to bounds. Provide an accessible name.
+```tsx
+<NumberInput aria-label="Quantity" min={0} max={99} value={qty} onValueChange={setQty} />
+```
+
+### RangeSlider
+`value?`/`defaultValue?: [number, number]` (default `[min, max]`) · `min?` (0) · `max?` (100) · `step?` (1) · `onChange?: (value: [number, number]) => void` · `onChangeEnd?` · `minDistance?` (default 0) · `disabled?` · `size`: `"sm" | "md"` (default) · `thumbLabels?` (default `["Minimum", "Maximum"]`). Two `role="slider"` thumbs; values kept ordered (`lower <= upper - minDistance`).
+```tsx
+<RangeSlider value={range} onChange={setRange} step={5} minDistance={10} />
+```
+
+### Combobox  (+ ComboboxInput, ComboboxList, ComboboxItem, ComboboxEmpty)
+ARIA 1.2 single-select autocomplete. `Combobox` (root): `value?`/`defaultValue?: string | null` · `onValueChange?: (value: string | null) => void` · `inputValue?`/`defaultInputValue?` · `onInputValueChange?` · `open?`/`defaultOpen?`/`onOpenChange?` · `filter?: ((textValue, search) => boolean) | null` (default case-insensitive `includes`; `null` disables internal filtering for external/async search) · `disabled?`.
+`ComboboxInput`: `size`: `"sm" | "md"` (default) `| "lg"` · `invalid?` · `placeholder?` + `<input>` attrs — give it an accessible name. `ComboboxList`: portaled `role="listbox"` panel. `ComboboxItem`: `value` (required) · `textValue?` · `disabled?`. `ComboboxEmpty`: no-results row.
+```tsx
+<Combobox onValueChange={setFruit}>
+  <ComboboxInput aria-label="Fruit" placeholder="Search a fruit…" />
+  <ComboboxList>
+    <ComboboxItem value="apple">Apple</ComboboxItem>
+    <ComboboxItem value="banana">Banana</ComboboxItem>
+    <ComboboxEmpty>No results found.</ComboboxEmpty>
+  </ComboboxList>
+</Combobox>
+```
+
+### CommandMenu  (+ CommandInput, CommandList, CommandGroup, CommandItem, CommandEmpty, CommandSeparator)
+cmdk-style command palette dialog. `CommandMenu`: `open?`/`defaultOpen?`/`onOpenChange?` · `shortcut?` (e.g. `"mod+k"`; `mod` = ⌘ on macOS, Ctrl elsewhere; off by default) · `label?` (default `"Command menu"`) · `filter?: ((textValue, search) => boolean) | null` (default substring; `null` disables) · `search?`/`defaultSearch?`/`onSearchChange?` · `closeOnSelect?` (default true). Focus trap + body scroll lock while open.
+`CommandInput`: `placeholder?` + `<input>` attrs (owns arrow/Enter/Escape keys, autofocused). `CommandGroup`: `heading?` (auto-hides when all items filtered out). `CommandItem`: `value?` · `textValue?` · `onSelect?: (value: string) => void` · `disabled?` · `leadingIcon?` · `hint?` (pairs with `Kbd`). `CommandEmpty` shows only on a non-empty, zero-match search; `CommandSeparator` hides while searching.
+```tsx
+<CommandMenu open={open} onOpenChange={setOpen} shortcut="mod+k">
+  <CommandInput />
+  <CommandList>
+    <CommandGroup heading="Navigation">
+      <CommandItem onSelect={() => router.push("/")}>Go to Home</CommandItem>
+    </CommandGroup>
+    <CommandEmpty>No results found.</CommandEmpty>
+  </CommandList>
+</CommandMenu>
+```
+
+### Calendar
+Single-date month grid (`role="grid"`, roving tabindex, arrows/Home/End/PageUp/PageDown keyboard nav). `value?`/`defaultValue?: Date | null` · `onValueChange?: (date: Date) => void` · `month?`/`defaultMonth?`/`onMonthChange?` · `min?`/`max?: Date` (inclusive whole days) · `isDateDisabled?: (date: Date) => boolean` · `weekStartsOn?: 0–6` (default 0 = Sunday) · `locale?` (BCP 47, default runtime) · `showOutsideDays?` (default true) · `autoFocus?` · `bordered?` (default true). Dates are plain `Date`s at local midnight — use `new Date(y, m, d)`, never `"YYYY-MM-DD"` strings.
+```tsx
+<Calendar value={date} onValueChange={setDate} min={new Date(2026, 5, 8)} />
+```
+
+### DatePicker
+Text input + portaled Calendar popup. `value?`/`defaultValue?: Date | null` · `onValueChange?: (date: Date | null) => void` · `size`: `"sm" | "md"` (default) `| "lg"` · `invalid?` · `min?`/`max?` · `isDateDisabled?` · `weekStartsOn?` · `locale?` · `placeholder?` (defaults to the locale pattern, e.g. `MM/DD/YYYY`) · `name?` (hidden input submits ISO `YYYY-MM-DD`) · `rootClassName?` · plus `<input>` attrs. Typing commits on Enter/blur (ISO or locale numeric format); invalid text reverts; clearing commits `null`.
+```tsx
+<DatePicker aria-label="Birthday" name="birthday" value={date} onValueChange={setDate} />
+```
+
+### Icons
+16 built-in icons exported from the package root: `CheckIcon`, `ChevronUpIcon`/`ChevronDownIcon`/`ChevronLeftIcon`/`ChevronRightIcon`, `MoreHorizontalIcon`, `CloseIcon`, `InfoIcon`/`SuccessIcon`/`WarningIcon`/`ErrorIcon`, `MinusIcon`, `CopyIcon`, `ExternalLinkIcon`, `SearchIcon`, `CalendarIcon`. Each is a 16×16 stroke SVG sized `1em` (scales with `font-size`, colored by `currentColor`), `aria-hidden` by default; props spread onto the `<svg>`.
+```tsx
+<Button leadingIcon={<CopyIcon />}>Copy</Button>
+<SearchIcon style={{ fontSize: 20 }} />
+```
+
+> Icon props on components (`leadingIcon`, `icon`, …) accept any `ReactNode` — the built-in set or your own icon library.
+
+---
+
+## Providers & Hooks
+
+### VelysProvider
+Owns the theme mode and hosts the imperative toast system — wrap your app once. `theme?: "light" | "dark"` (controlled) · `defaultTheme?` (default `"light"`) · `onThemeChange?` · `applyToDocument?` (default true — applies the theme class to `<html>` so portalled content is themed) · `toastPosition?` (default `"bottom-right"`).
+
+### useTheme()
+→ `{ theme, setTheme, toggleTheme }`. Read/control the theme mode. Must be inside `VelysProvider`.
+
+### useToast()
+→ `{ toast, dismiss, clear }`. `toast(options)` returns an id. Options: `status?`, `title?`, `description?`, `icon?`, `actionLabel?`, `onAction?`, `duration?` (ms, default 5000; `0` disables auto-dismiss), `position?` (`"top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right"` — overrides the provider default). Toasts stack per position.
+```tsx
+const { toast } = useToast();
+toast({ status: "success", title: "Saved", description: "All set." });
+```
+
+### useDisclosure(options?)
+→ `{ open, setOpen, onOpen, onClose, onToggle }`. Headless open/close state for overlays (`Modal`, `Drawer`, …). Controlled (`open`/`onOpenChange`) or uncontrolled (`defaultOpen`). No provider needed.
+
+### useMediaQuery(query) / usePrefersDark()
+SSR-safe media-query subscription; `usePrefersDark()` wraps `(prefers-color-scheme: dark)`.

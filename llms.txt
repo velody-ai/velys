@@ -61,6 +61,21 @@ export default function App() {
 - [Pagination](docs/components/Pagination.md): page navigation with truncated ranges
 - [Slider](docs/components/Slider.md): single-value range slider (keyboard + pointer)
 - [Table](docs/components/Table.md): data table (compound, striped/interactive rows)
+- [Link](docs/components/Link.md): styled anchor (brand/neutral/inherit tone, underline control, external affordance)
+- [Stack](docs/components/Stack.md): flex layout primitive (row/column, token-bound gap, align/justify/wrap)
+- [StatusDot](docs/components/StatusDot.md): colored status indicator dot (6 statuses, optional label, pulse)
+- [Tag](docs/components/Tag.md): dismissible chip (6 colors × subtle/outline, close button)
+- [Toggle](docs/components/Toggle.md): pressable toggle button (aria-pressed) + ToggleGroup (single/multiple, segmented)
+- [CopyButton](docs/components/CopyButton.md): copy-to-clipboard icon button with copied feedback
+- [Snippet](docs/components/Snippet.md): terminal command line(s) with copy-to-clipboard
+- [Collapsible](docs/components/Collapsible.md): disclosure primitive (Trigger/Content, animated, controlled/uncontrolled)
+- [NumberInput](docs/components/NumberInput.md): numeric input with steppers (min/max/step, spinbutton keyboard)
+- [RangeSlider](docs/components/RangeSlider.md): dual-thumb range slider ([lower, upper], keyboard + pointer)
+- [Combobox](docs/components/Combobox.md): filterable autocomplete input + listbox (compound: Combobox/ComboboxInput/ComboboxList/ComboboxItem/ComboboxEmpty; single-select, ARIA 1.2)
+- [CommandMenu](docs/components/CommandMenu.md): cmdk-style command palette dialog (CommandInput/List/Group/Item/Empty/Separator; substring filter, optional mod+K shortcut)
+- [Calendar](docs/components/Calendar.md): month grid date selection (role=grid keyboard nav, min/max, weekStartsOn, Intl localization)
+- [DatePicker](docs/components/DatePicker.md): text input + calendar popup (Date value, ISO + locale parsing, sm/md/lg, invalid, portal)
+- [Icons](docs/components/Icons.md): built-in currentColor icon set (16 icons, exported from the package root)
 
 ## Providers & Hooks
 

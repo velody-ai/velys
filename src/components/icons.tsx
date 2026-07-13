@@ -90,3 +90,31 @@ export const MinusIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M3.5 8h9" />
   </svg>
 );
+
+export const CopyIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base} {...p}>
+    <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
+    <path d="M10.5 3.5v-1a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h1" />
+  </svg>
+);
+
+export const ExternalLinkIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base} {...p}>
+    <path d="M6.5 3.5H3.5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V9.5" />
+    <path d="M9.5 2.5h4v4M13.2 2.8L7.5 8.5" />
+  </svg>
+);
+
+export const SearchIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base} {...p}>
+    <circle cx="7" cy="7" r="4.5" />
+    <path d="M10.5 10.5L14 14" />
+  </svg>
+);
+
+export const CalendarIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base} {...p}>
+    <rect x="2" y="3" width="12" height="11" rx="1.5" />
+    <path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3" />
+  </svg>
+);

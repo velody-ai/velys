@@ -9,6 +9,7 @@ import {
 } from "react";
 import * as css from "./Slider.css";
 import { cx } from "../../utils/cx";
+import { clamp, roundToStep } from "../../utils/number";
 
 export interface SliderProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue"> {
@@ -24,13 +25,6 @@ export interface SliderProps
   size?: "sm" | "md";
   /** Accessible label for the thumb. */
   "aria-label"?: string;
-}
-
-const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
-
-function roundToStep(value: number, min: number, step: number) {
-  const steps = Math.round((value - min) / step);
-  return min + steps * step;
 }
 
 /** Single-value range slider with keyboard and pointer support. */

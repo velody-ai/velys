@@ -17,6 +17,7 @@ import {
 import * as css from "./Select.css";
 import { ChevronDownIcon, CheckIcon } from "../icons";
 import { cx } from "../../utils/cx";
+import { useCoarsePointer } from "../../internal/useCoarsePointer";
 
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> {
   size?: "sm" | "md" | "lg";
@@ -43,20 +44,6 @@ function useParsedOptions(children: ReactNode): OptionData[] {
     });
     return out;
   }, [children]);
-}
-
-/** Detects coarse pointers (touch) so we can fall back to the native <select> + OS menu. */
-function useCoarsePointer(): boolean {
-  const [coarse, setCoarse] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
-    const mq = window.matchMedia("(pointer: coarse)");
-    const update = () => setCoarse(mq.matches);
-    update();
-    mq.addEventListener?.("change", update);
-    return () => mq.removeEventListener?.("change", update);
-  }, []);
-  return coarse;
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
