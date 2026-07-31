@@ -109,6 +109,11 @@ export const panel = style({
   display: "flex",
   flexDirection: "column",
   gap: vars.space.xxs,
+  // 이 패널은 <ul>이다. UA 기본 스타일(margin-block 1em ≈ 16px)을 지우지 않으면 top의
+  // 4px 위에 그 margin이 얹혀 실제 간격이 20px가 된다 — 트리거와 패널이 벌어져 그 틈으로
+  // 아래 요소가 비쳐 보인다. Breadcrumb·Pagination의 리스트 리셋과 같은 처리.
+  margin: 0,
+  listStyle: "none",
   maxHeight: "280px",
   overflowY: "auto",
   padding: vars.space.xs,
